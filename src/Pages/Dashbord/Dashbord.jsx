@@ -4,6 +4,7 @@ import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { FiPlus, FiList, FiHeart, FiMenu, FiX, FiHome, FiArrowLeft, FiEye, FiSun, FiMoon } from 'react-icons/fi';
 import { MdDashboard } from 'react-icons/md';
 import { AuthContext } from '../../Context/AuthContext';
+import { resolveMediaUrl } from '../../utils/mediaUrl';
 
 const Dashbord = () => {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ const Dashbord = () => {
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2">
             <img
-              src={user?.photoURL || 'https://i.ibb.co/2Z3p8wN/default-user.png'}
+              src={resolveMediaUrl(user?.photoURL)}
               alt="User"
               className="w-10 h-10 rounded-full border-2 border-blue-500"
             />

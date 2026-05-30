@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import {
-  FaFacebookF,
-  FaInstagram,
-  FaTwitter,
   FaWhatsapp,
   FaEnvelope,
   FaPhone,
   FaMapMarkerAlt,
   FaClock,
   FaPaperPlane,
-  FaGlobe,
 } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -84,57 +80,30 @@ const Contact = () => {
     {
       icon: <FaEnvelope className="text-blue-600 dark:text-blue-400 text-2xl" />,
       title: 'Email Us',
-      content: 'hakimcolor777@gmail.com',
-      link: 'mailto:hakimcolor777@gmail.com',
-      description: 'Send us an email anytime'
+      content: 'vivektripathi3405@gmail.com',
+      link: 'mailto:vivektripathi3405@gmail.com',
+      description: 'Reach Vivekanand Tripathi anytime'
     },
     {
       icon: <FaPhone className="text-green-600 dark:text-green-400 text-2xl" />,
       title: 'Call Us',
-      content: '+880 1818 777 856',
-      link: 'tel:+8801818777856',
-      description: 'Mon-Fri from 9am to 6pm'
+      content: '+91 7879539174',
+      link: 'tel:+917879539174',
+      description: 'Mon–Fri from 9am to 6pm IST'
     },
     {
-      icon: <FaGlobe className="text-indigo-600 dark:text-indigo-400 text-2xl" />,
-      title: 'Portfolio',
-      content: 'View My Work',
-      link: 'https://hakimcolorportfolio.vercel.app/',
-      description: 'Check out my portfolio website'
+      icon: <FaWhatsapp className="text-green-500 text-2xl" />,
+      title: 'WhatsApp',
+      content: '+91 7879539174',
+      link: 'https://wa.me/917879539174',
+      description: 'Chat with us on WhatsApp'
     },
     {
       icon: <FaMapMarkerAlt className="text-red-600 dark:text-red-400 text-2xl" />,
       title: 'Location',
-      content: 'Dhaka, Bangladesh',
+      content: 'India',
       link: '#',
-      description: 'Come say hello at our office'
-    }
-  ];
-
-  const socialLinks = [
-    {
-      icon: <FaWhatsapp className="text-green-500 text-2xl" />,
-      name: 'WhatsApp',
-      link: 'https://wa.me/01818777856',
-      color: 'hover:bg-green-500'
-    },
-    {
-      icon: <FaFacebookF className="text-blue-600 text-2xl" />,
-      name: 'Facebook',
-      link: 'https://www.facebook.com/hakimcolorofficial',
-      color: 'hover:bg-blue-600'
-    },
-    {
-      icon: <FaInstagram className="text-pink-500 text-2xl" />,
-      name: 'Instagram',
-      link: 'https://www.instagram.com/hakim.color/',
-      color: 'hover:bg-pink-500'
-    },
-    {
-      icon: <FaTwitter className="text-blue-400 text-2xl" />,
-      name: 'Twitter',
-      link: 'https://x.com/hakimcolor',
-      color: 'hover:bg-blue-400'
+      description: 'Project based in India'
     }
   ];
 
@@ -285,28 +254,25 @@ const Contact = () => {
               </div>
             </SlideOnScroll>
 
-            {/* Social Media Links */}
+            {/* WhatsApp Connect */}
             <SlideOnScroll>
-              <div className="rounded-2xl p-8 shadow-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-500" style={{ backgroundColor: 'var(--bg-color)' }}>
+              <div className="rounded-2xl p-8 shadow-xl border-2 border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-500 transition-all duration-500" style={{ backgroundColor: 'var(--bg-color)' }}>
                 <h3 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--text-color)' }}>
-                  Follow Us
+                  Connect on WhatsApp
                 </h3>
-                <div className="flex flex-wrap justify-center gap-4">
-                  {socialLinks.map((social, index) => (
-                    <a
-                      key={index}
-                      href={social.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ${social.color} hover:text-white group border-2 border-gray-200 dark:border-gray-600 hover:border-transparent`}
-                      title={social.name}
-                    >
-                      {social.icon}
-                    </a>
-                  ))}
+                <div className="flex justify-center">
+                  <a
+                    href="https://wa.me/917879539174"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 w-14 h-14 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:bg-green-500 hover:text-white group border-2 border-gray-200 dark:border-gray-600 hover:border-transparent"
+                    title="WhatsApp"
+                  >
+                    <FaWhatsapp className="text-green-500 text-2xl group-hover:text-white" />
+                  </a>
                 </div>
                 <p className="text-center mt-6 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Stay connected with our community updates and news
+                  Message Vivekanand Tripathi on WhatsApp for quick support
                 </p>
               </div>
             </SlideOnScroll>

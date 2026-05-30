@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { AuthContext } from '../Context/AuthContext';
 import { FiSend, FiMapPin, FiDollarSign, FiImage, FiFileText, FiTag, FiUser } from 'react-icons/fi';
 import { Helmet } from 'react-helmet';
+import { addIssue } from '../api/databaseService';
 
 const AddIssue = () => {
   const { user } = useContext(AuthContext);
@@ -26,22 +27,7 @@ const AddIssue = () => {
     };
 
     try {
-      const res1 = await fetch('https://community-clen.vercel.app/myissue', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res1.ok) throw new Error('Failed to add issue in MyIssues');
-
-      const res2 = await fetch('https://community-clen.vercel.app/issue', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res2.ok) throw new Error('Failed to add issue in All Issues');
-
+      await addIssue(formData);
       toast.success('Issue added successfully!');
       e.target.reset();
     } catch (err) {
@@ -51,6 +37,7 @@ const AddIssue = () => {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <div className="max-w-4xl mx-auto p-6">

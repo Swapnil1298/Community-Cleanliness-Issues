@@ -1,7 +1,7 @@
 
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import HomeSlider from '../Componentes/HomeSlider';
-import { useLoaderData, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ALLCARD from './ALLCARD';
 import ExtraSection from './ExtraSection';
 import { Typewriter } from 'react-simple-typewriter';
@@ -11,10 +11,27 @@ import SlideOnScroll from './SlideOnScroll';
 import { AuthContext } from '../Context/AuthContext';
 import { FiArrowDown, FiUsers, FiTrendingUp, FiAward, FiCheckCircle, FiStar, FiMail } from 'react-icons/fi';
 import { MdRecycling, MdLocationCity, MdTrendingUp } from 'react-icons/md';
+import { getLatestIssues } from '../api/databaseService';
+import Loading from './Loding';
 
 const Home = () => {
-  const latestdata = useLoaderData();
+  const [latestdata, setLatestdata] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchLatest = async () => {
+      try {
+        const data = await getLatestIssues();
+        setLatestdata(data);
+      } catch (error) {
+        console.error('Error fetching latest issues:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchLatest();
+  }, []);
 
   // Statistics data
   const stats = [

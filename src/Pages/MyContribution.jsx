@@ -1,6 +1,5 @@
 
-import React, { useContext, useState, useMemo } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import React, { useContext, useState, useMemo, useEffect } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { Helmet } from 'react-helmet';
 import { FiDownload, FiFileText, FiCalendar, FiDollarSign, FiUser, FiMail, FiPhone, FiSearch, FiBarChart2, FiPieChart, FiTrendingUp } from 'react-icons/fi';
@@ -34,18 +33,37 @@ ChartJS.register(
   LineElement
 );
 
+import { getMyContributions } from '../api/databaseService';
+import Loading from './Loding';
+
 const MyContribution = () => {
-  const contribution = useLoaderData(); 
+  const [contribution, setContribution] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(AuthContext); 
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date');
   const [sortOrder, setSortOrder] = useState('desc');
   const [activeChartView, setActiveChartView] = useState('overview'); // 'overview', 'monthly', 'distribution', 'growth'
 
-  const myContributions = contribution.filter(
-    (item) => item.email === user?.email
-  );
+  useEffect(() => {
+    const fetchContributions = async () => {
+      if (user?.email) {
+        try {
+          const data = await getMyContributions(user.email);
+          setContribution(data);
+        } catch (error) {
+          console.error("Error fetching contributions:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    };
+    fetchContributions();
+  }, [user]);
+
+  const myContributions = contribution;
 
   // Filter and sort contributions
   const filteredContributions = myContributions

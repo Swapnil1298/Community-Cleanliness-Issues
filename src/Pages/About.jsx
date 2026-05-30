@@ -57,22 +57,13 @@ const About = () => {
 
   const team = [
     {
-      name: 'Sarah Johnson',
-      role: 'Founder & CEO',
+      name: 'Vivekanand Tripathi',
+      role: 'Project Holder & Lead Developer',
       image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      description: 'Environmental advocate with 10+ years in community development.'
-    },
-    {
-      name: 'Mike Chen',
-      role: 'CTO',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      description: 'Tech innovator passionate about using technology for social good.'
-    },
-    {
-      name: 'Emma Davis',
-      role: 'Community Manager',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      description: 'Community organizer dedicated to empowering local voices.'
+      description: 'Creator and maintainer of this community platform. Built the application architecture and a fully independent backend structure.',
+      email: 'vivektripathi3405@gmail.com',
+      phone: '+91 7879539174',
+      whatsapp: 'https://wa.me/917879539174',
     }
   ];
 
@@ -296,6 +287,23 @@ const About = () => {
                   <p style={{ color: 'var(--text-secondary)' }}>
                     {member.description}
                   </p>
+                  <div className="mt-4 space-y-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <p>
+                      <a href={`mailto:${member.email}`} className="text-blue-600 dark:text-blue-400 hover:underline">
+                        {member.email}
+                      </a>
+                    </p>
+                    <p>
+                      <a href={`tel:${member.phone.replace(/\s/g, '')}`} className="text-blue-600 dark:text-blue-400 hover:underline">
+                        {member.phone}
+                      </a>
+                    </p>
+                    <p>
+                      <a href={member.whatsapp} target="_blank" rel="noopener noreferrer" className="text-green-600 dark:text-green-400 hover:underline">
+                        WhatsApp
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </SlideOnScroll>
             ))}

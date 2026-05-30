@@ -1,51 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth';
-import { auth } from '../Firebase/Firebase.confige';
+  register,
+  login,
+  googleLogin,
+  getCurrentUser,
+  logout as clearAuth,
+} from '../api/authService';
+import { getToken } from '../api/apiClient';
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const createUser = (
-    emailValue,
-    passwordValue,
-    imgUrlValue,
-    firstNameValue
-  ) => {
-    return createUserWithEmailAndPassword(
-      auth,
-      emailValue,
-      passwordValue,
-      imgUrlValue,
-      firstNameValue
-    );
+  const createUser = (email, password, displayName, profileImage) => {
+    return register(email, password, displayName, profileImage).then((authUser) => {
+      setUser(authUser);
+      return authUser;
+    });
   };
 
-  const singinuser = (email, passcode) => {
-    return signInWithEmailAndPassword(auth, email, passcode);
+  const singinuser = (email, password) => {
+    return login(email, password).then((authUser) => {
+      setUser(authUser);
+      return authUser;
+    });
+  };
+
+  const googleSignIn = (credential) => {
+    return googleLogin(credential).then((authUser) => {
+      setUser(authUser);
+      return authUser;
+    });
   };
 
   const singout = () => {
-    return signOut(auth);
+    clearAuth();
+    setUser(null);
+    return Promise.resolve();
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      // console.log('Current user:', currentUser);
-    });
-    return () => unsubscribe();
+    const restoreSession = async () => {
+      const token = getToken();
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch {
+        clearAuth();
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    restoreSession();
   }, []);
 
   const authInfo = {
     user,
+    loading,
     createUser,
     singinuser,
+    googleSignIn,
     singout,
   };
 

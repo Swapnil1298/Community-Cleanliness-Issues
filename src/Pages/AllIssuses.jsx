@@ -1,19 +1,35 @@
 
-import React, { useState, useMemo } from 'react';
-import { useLoaderData } from 'react-router';
+import React, { useState, useMemo, useEffect } from 'react';
 import ALLCARD from './ALLCARD';
 import { Helmet } from 'react-helmet';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { Search } from 'lucide-react';
+import { getAllIssues } from '../api/databaseService';
+import Loading from './Loding';
 
 const AllIssues = () => {
-  const allissue = useLoaderData(); // সব ডাটা
+  const [allissue, setAllissue] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
 
   // Sorting & Search state
   const [sortOption, setSortOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const fetchIssues = async () => {
+      try {
+        const data = await getAllIssues();
+        setAllissue(data);
+      } catch (error) {
+        console.error('Error fetching issues:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchIssues();
+  }, []);
 
   // Filter & sort issues
   const filteredIssues = useMemo(() => {
@@ -44,6 +60,8 @@ const AllIssues = () => {
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentItems = filteredIssues.slice(indexOfFirst, indexOfLast);
+
+  if (isLoading) return <Loading />;
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber < 1 || pageNumber > totalPages) return;

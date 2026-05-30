@@ -9,7 +9,7 @@ const Loading = () => {
         <p className="text-gray-700 font-semibold">Loading, please wait...</p>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .loader {
           border: 6px solid #f3f3f3;
           border-top: 6px solid #3498db;

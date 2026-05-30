@@ -93,14 +93,31 @@ const Privacyssss = () => {
       <h2 className="text-xl font-semibold mt-8 mb-3">8. Contact Us</h2>
       <p>
         If you have any questions about our Privacy Policy or data handling
-        practices, please contact us at:{' '}
-        <a
-          href="mailto:hakimcolor777@gmail.com"
-          className="text-green-600 hover:underline"
-        >
-          hakimcolor777@gmail.com
-        </a>
+        practices, please contact the project holder, <strong>Vivekanand Tripathi</strong>:
       </p>
+      <ul className="list-none mt-3 space-y-1">
+        <li>
+          Email:{' '}
+          <a
+            href="mailto:vivektripathi3405@gmail.com"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            vivektripathi3405@gmail.com
+          </a>
+        </li>
+        <li>Phone: +91 7879539174</li>
+        <li>
+          WhatsApp:{' '}
+          <a
+            href="https://wa.me/917879539174"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            +91 7879539174
+          </a>
+        </li>
+      </ul>
 
       <p className="mt-10 text-sm text-gray-500 dark:text-gray-400">
         Last updated: November 10, 2025

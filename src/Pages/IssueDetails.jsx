@@ -106,19 +106,36 @@
 // };
 
 // export default IssueDetails;
-import React from 'react';
-import { NavLink, useLoaderData, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Tag, DollarSign, ArrowLeft } from 'lucide-react'; 
 import { Helmet } from 'react-helmet';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from './Loding';
+import { getIssueById } from '../api/databaseService';
 
 const IssueDetails = () => {
-  const issue = useLoaderData();
+  const { id } = useParams();
+  const [issue, setIssue] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate(); 
+  
+  useEffect(() => {
+    const fetchIssue = async () => {
+      try {
+        const data = await getIssueById(id);
+        setIssue(data);
+      } catch (error) {
+        console.error('Error fetching issue:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchIssue();
+  }, [id]);
 
-  if (!issue) {
+  if (isLoading || !issue) {
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-600">
   <Loading/>

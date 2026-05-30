@@ -1,32 +1,67 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  updateProfile,
-} from 'firebase/auth';
-import { auth } from '../Firebase/Firebase.confige';
+import { GoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../Context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
 
-const provider = new GoogleAuthProvider();
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { createUser } = useContext(AuthContext);
+  const { createUser, googleSignIn } = useContext(AuthContext);
 
   const [email, setEmail] = useState('');
   const [passcode, setPasscode] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [imgUrl, setImgUrl] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleToggle = () => setShow(!show);
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      setProfileImage(null);
+      setImagePreview('');
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file.');
+      e.target.value = '';
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast.error('Image must be smaller than 5 MB.');
+      e.target.value = '';
+      return;
+    }
+
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
+    setProfileImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,12 +70,15 @@ const SignUp = () => {
 
     const terms = e.target.terms.checked;
     const firstNameValue = firstName.trim();
-    const imgUrlValue = imgUrl.trim();
     const emailValue = email.trim();
     const passwordValue = passcode.trim();
 
     if (!terms) {
       toast.error('Please accept our terms and conditions.');
+      return;
+    }
+    if (!profileImage) {
+      toast.error('Please upload a profile image.');
       return;
     }
     if (passwordValue.length < 6) {
@@ -62,35 +100,39 @@ const SignUp = () => {
       return;
     }
 
-    createUser(emailValue, passwordValue, firstNameValue, imgUrlValue)
-      .then((res) => {
-        return updateProfile(res.user, {
-          displayName: firstNameValue,
-          photoURL: imgUrlValue,
-        }).then(() => {
-          e.target.reset();
-          setEmail('');
-          setPasscode('');
-          setFirstName('');
-          setImgUrl('');
-          setSuccess(true);
-          toast.success('Registration successful!');
-          navigate('/');
-        });
+    setIsSubmitting(true);
+
+    createUser(emailValue, passwordValue, firstNameValue, profileImage)
+      .then(() => {
+        e.target.reset();
+        setEmail('');
+        setPasscode('');
+        setFirstName('');
+        setProfileImage(null);
+        if (imagePreview) {
+          URL.revokeObjectURL(imagePreview);
+        }
+        setImagePreview('');
+        setSuccess(true);
+        toast.success('Registration successful!');
+        navigate('/');
       })
       .catch((err) => {
         toast.error(err.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
-  const handleGoogleSignUp = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
+  const handleGoogleSuccess = (credentialResponse) => {
+    googleSignIn(credentialResponse.credential)
+      .then(() => {
         toast.success('Google Sign Up successful!');
         navigate('/');
       })
-      .catch((error) => {
-        toast.error(error.message);
+      .catch((err) => {
+        toast.error(err.message);
       });
   };
 
@@ -121,16 +163,28 @@ const SignUp = () => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-white mb-2">Profile Image URL</label>
+            <label className="text-white mb-2">Profile Image</label>
             <input
-              type="text"
-              name="imgUrl"
-              placeholder="Enter image URL"
-              value={imgUrl}
-              onChange={(e) => setImgUrl(e.target.value)}
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              onChange={handleImageChange}
               required
-              className="w-full px-4 py-3 bg-white text-[#2E8B57] border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:outline-none transition"
+              className="w-full px-4 py-3 bg-white text-[#2E8B57] border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#2E8B57] file:text-white file:cursor-pointer"
             />
+            <p className="text-[#FFDAB9] text-xs mt-2">
+              Upload JPG, PNG, or GIF (max 5 MB)
+            </p>
+            {imagePreview && (
+              <div className="mt-4 flex flex-col items-center">
+                <img
+                  src={imagePreview}
+                  alt="Profile preview"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-[#FFD700]"
+                />
+                <p className="text-white text-sm mt-2">{profileImage?.name}</p>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -183,28 +237,42 @@ const SignUp = () => {
             <p className="text-green-300 text-sm">Registration successful!</p>
           )}
 
-          {/* Unified button style */}
           <button
             type="submit"
-            className="w-full py-3 border border-[#FFD700] bg-transparent text-white font-bold rounded-xl hover:bg-[#FFD700] hover:text-[#2E8B57] transition duration-300 cursor-pointer"
+            disabled={isSubmitting}
+            className="w-full py-3 border border-[#FFD700] bg-transparent text-white font-bold rounded-xl hover:bg-[#FFD700] hover:text-[#2E8B57] transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign Up
+            {isSubmitting ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
 
-        <div className="flex items-center my-6">
-          <div className="flex-grow h-px bg-[#FFD700]"></div>
-          <span className="px-3 text-[#FFD700] text-sm">or</span>
-          <div className="flex-grow h-px bg-[#FFD700]"></div>
-        </div>
+        {googleClientId && (
+          <>
+            <div className="flex items-center my-6">
+              <div className="flex-grow h-px bg-[#FFD700]"></div>
+              <span className="px-3 text-[#FFD700] text-sm">or</span>
+              <div className="flex-grow h-px bg-[#FFD700]"></div>
+            </div>
 
-        <button
-          onClick={handleGoogleSignUp}
-          className="w-full flex items-center justify-center gap-3 border border-[#FFD700] py-3 rounded-xl text-white hover:bg-[#FFD700] hover:text-[#2E8B57] transition duration-300"
-        >
-          <FcGoogle className="w-7 h-7" />
-          <span className="font-medium cursor-pointer">Continue with Google</span>
-        </button>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => toast.error('Google sign in failed')}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+              />
+            </div>
+          </>
+        )}
+
+        {!googleClientId && (
+          <p className="text-center text-[#FFDAB9] text-sm mt-6 flex items-center justify-center gap-2">
+            <FcGoogle className="w-5 h-5" />
+            Google sign-in requires VITE_GOOGLE_CLIENT_ID
+          </p>
+        )}
 
         <p className="text-sm text-center text-white mt-6">
           Already have an account?{' '}

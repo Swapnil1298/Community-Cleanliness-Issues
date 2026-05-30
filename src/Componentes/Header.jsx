@@ -5,7 +5,7 @@ import { MdDashboard, MdBugReport, MdContactSupport } from 'react-icons/md';
 import logo from '../assets/Logo.png';
 import { AuthContext } from '../Context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
-import Swal from 'sweetalert2';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 
 const Header = () => {
   const { user, singout } = useContext(AuthContext);
@@ -133,7 +133,7 @@ const Header = () => {
                 >
                   <img
                     src={
-                      user.photoURL || 'https://i.ibb.co/2Z3p8wN/default-user.png'
+                      resolveMediaUrl(user.photoURL)
                     }
                     alt="User"
                     className="w-8 h-8 xl:w-10 xl:h-10 rounded-full border-2 border-white"
@@ -245,7 +245,7 @@ const Header = () => {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
                     <img
-                      src={user.photoURL || 'https://i.ibb.co/2Z3p8wN/default-user.png'}
+                      src={resolveMediaUrl(user.photoURL)}
                       alt="User"
                       className="w-10 h-10 rounded-full border-2 border-white/50"
                     />

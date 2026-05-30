@@ -1,26 +1,41 @@
 
-import React, { useState, useContext } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { FiEdit, FiTrash2, FiEye, FiCalendar, FiMapPin, FiDollarSign, FiTag, FiClock, FiX } from 'react-icons/fi';
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getMyIssues, updateIssue, deleteIssue } from '../api/databaseService';
+import Loading from './Loding';
 
 const MYIssues = () => {
-  const allissues = useLoaderData();
   const { user } = useContext(AuthContext);
-
-  const initialIssues = allissues.filter(
-    (issue) => issue.email === user?.email
-  );
-  const [myIssues, setMyIssues] = useState(initialIssues);
+  const [myIssues, setMyIssues] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const fetchMyIssues = async () => {
+      if (user?.email) {
+        try {
+          const data = await getMyIssues(user.email);
+          setMyIssues(data);
+        } catch (error) {
+          console.error("Error fetching my issues:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    };
+    fetchMyIssues();
+  }, [user]);
 
   const handleView = (issue) => {
     setSelectedIssue(issue);
@@ -42,23 +57,16 @@ const MYIssues = () => {
   };
 
   const confirmDelete = async () => {
-    if (!selectedIssue?._id) return;
+    if (!selectedIssue?.id) return;
     setIsDeleting(true);
     try {
-      const res = await fetch(
-        `https://community-clen.vercel.app/myissues/${selectedIssue._id}`,
-        { method: 'DELETE' }
+      await deleteIssue(selectedIssue.id);
+      toast.success('Issue deleted successfully!', { position: 'top-right' });
+      setMyIssues(
+        myIssues.filter((issue) => issue.id !== selectedIssue.id)
       );
-      if (res.ok) {
-        toast.success('Issue deleted successfully!', { position: 'top-right' });
-        setMyIssues(
-          myIssues.filter((issue) => issue._id !== selectedIssue._id)
-        );
-        setShowDeleteModal(false);
-        setSelectedIssue(null);
-      } else {
-        throw new Error('Delete failed');
-      }
+      setShowDeleteModal(false);
+      setSelectedIssue(null);
     } catch (err) {
       console.error('Delete error:', err);
       toast.error('Failed to delete issue.', { position: 'top-right' });
@@ -69,7 +77,7 @@ const MYIssues = () => {
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedIssue?._id) return;
+    if (!selectedIssue?.id) return;
     setIsUpdating(true);
 
     const form = e.target;
@@ -82,31 +90,19 @@ const MYIssues = () => {
     };
 
     try {
-      const res = await fetch(
-        `https://community-clen.vercel.app/myissues/${selectedIssue._id}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedData),
-        }
+      await updateIssue(selectedIssue.id, updatedData);
+      toast.success('Issue updated successfully!', {
+        position: 'top-right',
+      });
+      setMyIssues(
+        myIssues.map((issue) =>
+          issue.id === selectedIssue.id
+            ? { ...issue, ...updatedData }
+            : issue
+        )
       );
-
-      if (res.ok) {
-        toast.success('Issue updated successfully!', {
-          position: 'top-right',
-        });
-        setMyIssues(
-          myIssues.map((issue) =>
-            issue._id === selectedIssue._id
-              ? { ...issue, ...updatedData }
-              : issue
-          )
-        );
-        setShowUpdateModal(false);
-        setSelectedIssue(null);
-      } else {
-        throw new Error('Update failed');
-      }
+      setShowUpdateModal(false);
+      setSelectedIssue(null);
     } catch (err) {
       console.error('Update error:', err);
       toast.error('Failed to update issue.', { position: 'top-right' });
@@ -225,7 +221,7 @@ const MYIssues = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {myIssues.map((issue) => (
             <div
-              key={issue._id}
+              key={issue.id}
               className="rounded-xl shadow-lg hover:shadow-2xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2"
               style={{ backgroundColor: 'var(--bg-color)' }}
             >

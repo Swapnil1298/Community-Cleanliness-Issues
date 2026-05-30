@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { FiUser, FiMail, FiCalendar, FiEdit3, FiCamera, FiSave, FiX, FiShield, FiMapPin, FiPhone, FiSettings, FiAward } from 'react-icons/fi';
 import { MdVerified, MdDashboard } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -36,7 +37,7 @@ const Profile = () => {
     if (imageError || !user?.photoURL) {
       return 'https://via.placeholder.com/150/4F46E5/FFFFFF?text=User';
     }
-    return user.photoURL;
+    return resolveMediaUrl(user.photoURL);
   };
 
   const formatDate = (dateString) => {

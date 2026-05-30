@@ -1,25 +1,50 @@
-import React, { useState, useContext } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { X, Calendar, Tag, MapPin, DollarSign, ArrowLeft } from 'lucide-react';
 import { AuthContext } from '../Context/AuthContext';
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getIssueById, addContribution } from '../api/databaseService';
+import Loading from './Loding';
 
 const ContributeCard = () => {
-  const issue = useLoaderData();
+  const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [issue, setIssue] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchIssue = async () => {
+      try {
+        const data = await getIssueById(id);
+        setIssue(data);
+      } catch (error) {
+        console.error('Error fetching issue:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchIssue();
+  }, [id]);
 
   const [formData, setFormData] = useState({
     contributorName: '',
     email: user?.email || '',
     phone: '',
     address: '',
-    amount: issue.amount || '',
+    amount: '',
     additionalInfo: '',
   });
+
+  // Set default amount when issue loads
+  useEffect(() => {
+    if (issue) {
+      setFormData(prev => ({ ...prev, amount: issue.amount || '' }));
+    }
+  }, [issue]);
 
   const today = new Date().toLocaleDateString();
 
@@ -43,36 +68,28 @@ const ContributeCard = () => {
     };
 
     try {
-      const res = await fetch(
-        'https://community-clen.vercel.app/contributions',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(contributionData),
-        }
-      );
-
-      const data = await res.json();
-      if (data.insertedId) {
-        toast.success('Contribution saved successfully!', {
-          position: 'top-right',
-          autoClose: 3000,
-        });
-        setShowModal(false);
-      } else {
-        toast.error('Failed to save contribution', {
-          position: 'top-right',
-          autoClose: 3000,
-        });
-      }
+      await addContribution(contributionData);
+      toast.success('Contribution saved successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+      setShowModal(false);
     } catch (error) {
       console.error(error);
-      toast.error('Server error occurred', {
+      toast.error('Failed to save contribution', {
         position: 'top-right',
         autoClose: 3000,
       });
     }
   };
+
+  if (isLoading || !issue) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-600">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-8 mt-16" style={{ backgroundColor: 'var(--bg-color)' }}>

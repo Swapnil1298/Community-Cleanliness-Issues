@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
-import { Helmet } from 'react-helmet';
 
 const ALLCARD = ({ allissues}) => {
   return (

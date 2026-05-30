@@ -1,21 +1,17 @@
-import { auth } from '../Firebase/Firebase.confige';
 import React, { useContext, useState } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../Context/AuthContext';
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendPasswordResetEmail,
-} from 'firebase/auth';
+import { forgotPassword } from '../api/authService';
 import toast, { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
 
-const provider = new GoogleAuthProvider();
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const SignIn = () => {
-  const { singinuser } = useContext(AuthContext);
+  const { singinuser, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -42,10 +38,10 @@ const SignIn = () => {
       });
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleSuccess = (credentialResponse) => {
     setError('');
 
-    signInWithPopup(auth, provider)
+    googleSignIn(credentialResponse.credential)
       .then(() => {
         setEmail('');
         setPasscode('');
@@ -64,11 +60,9 @@ const SignIn = () => {
       return;
     }
 
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        toast.success('Password reset email sent! Check your Gmail inbox.', {
-          duration: 3000,
-        });
+    forgotPassword(email)
+      .then((data) => {
+        toast.success(data.message, { duration: 3000 });
       })
       .catch((err) => {
         toast.error(err.message, { duration: 2000 });
@@ -152,19 +146,33 @@ const SignIn = () => {
           </button>
         </form>
 
-        <div className="flex items-center my-6">
-          <div className="flex-grow h-px bg-[#FFD700]"></div>
-          <span className="px-3 text-[#FFD700] text-sm">or</span>
-          <div className="flex-grow h-px bg-[#FFD700]"></div>
-        </div>
+        {googleClientId && (
+          <>
+            <div className="flex items-center my-6">
+              <div className="flex-grow h-px bg-[#FFD700]"></div>
+              <span className="px-3 text-[#FFD700] text-sm">or</span>
+              <div className="flex-grow h-px bg-[#FFD700]"></div>
+            </div>
 
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 border border-[#FFD700] py-3 rounded-xl text-white hover:bg-[#FFD700] hover:text-[#2E8B57] transition duration-300"
-        >
-          <FcGoogle className="w-7 h-7" />
-          <span className="font-medium cursor-pointer">Continue with Google</span>
-        </button>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => toast.error('Google sign in failed', { duration: 2000 })}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+              />
+            </div>
+          </>
+        )}
+
+        {!googleClientId && (
+          <p className="text-center text-[#FFDAB9] text-sm mt-6 flex items-center justify-center gap-2">
+            <FcGoogle className="w-5 h-5" />
+            Google sign-in requires VITE_GOOGLE_CLIENT_ID
+          </p>
+        )}
 
         <p className="text-sm text-center text-white mt-6">
           Don’t have an account?{' '}

@@ -4,8 +4,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom'; 
 import logo from '../assets/Logo.png';
 import { Helmet } from 'react-helmet';
-import { FiFacebook, FiInstagram, FiGithub, FiExternalLink } from 'react-icons/fi';
-import { FaMedium, FaPinterest } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 export default function Footer({
   siteName = 'CleanCity',
   
@@ -40,66 +39,22 @@ export default function Footer({
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Building stronger communities through collaborative issue reporting and resolution.
             </p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+              Project Holder: Vivekanand Tripathi
+            </p>
             
             {/* Social Media Links */}
             <div className="flex gap-4 mb-4">
               <a
-                href="https://www.facebook.com/hakimcolorofficial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 hover:scale-110"
-                aria-label="Facebook"
-              >
-                <FiFacebook size={24} />
-              </a>
-              <a
-                href="https://www.instagram.com/hakim.color/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-all duration-300 hover:scale-110"
-                aria-label="Instagram"
-              >
-                <FiInstagram size={24} />
-              </a>
-              <a
-                href="https://github.com/hakimcolor"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="GitHub"
-              >
-                <FiGithub size={24} />
-              </a>
-              <a
-                href="https://medium.com/@hakimcolor777"
+                href="https://wa.me/917879539174"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-all duration-300 hover:scale-110"
-                aria-label="Medium"
+                aria-label="WhatsApp"
               >
-                <FaMedium size={24} />
-              </a>
-              <a
-                href="https://www.pinterest.com/hakimcolor/_profile/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-all duration-300 hover:scale-110"
-                aria-label="Pinterest"
-              >
-                <FaPinterest size={24} />
+                <FaWhatsapp size={24} />
               </a>
             </div>
-
-            {/* Portfolio Link */}
-            <a
-              href="https://hakimcolorportfolio.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-            >
-              <FiExternalLink size={16} />
-              View My Portfolio
-            </a>
           </div>
 
           {/* Useful Links */}
@@ -131,9 +86,9 @@ export default function Footer({
           <div>
             <h3 className="text-sm font-semibold mb-4">Get in Touch</h3>
             <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <p>📧 hakimcolor777@gmail.com</p>
-              <p>📞 +8801818777856</p>
-              <p>📍 Jashore, Khulna, Dhaka, Bangladesh</p>
+              <p>📧 vivektripathi3405@gmail.com</p>
+              <p>📞 +91 7879539174</p>
+              <p>📍 India</p>
             </div>
           </div>
         </div>
@@ -142,7 +97,7 @@ export default function Footer({
         <div className="mt-8 border-t border-gray-200 dark:border-gray-800 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm">
-              © {year} {siteName}. All rights reserved.
+              © {year} {siteName}. All rights reserved. · Vivekanand Tripathi
             </p>
             <div className="flex items-center gap-4 text-sm">
               <Link to="/terms" className="hover:underline">

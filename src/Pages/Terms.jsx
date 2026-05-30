@@ -110,14 +110,32 @@ const Terms = () => {
           7. Contact Information
         </h2>
         <p className="text-base sm:text-lg leading-relaxed">
-          If you have any questions about these Terms, please contact us at:{' '}
-          <a
-            href="mailto:hakimcolor777@gmail.com"
-            className="text-green-600 hover:underline"
-          >
-            hakimcolor777@gmail.com
-          </a>
+          If you have any questions about these Terms, please contact the project
+          holder, <strong>Vivekanand Tripathi</strong>:
         </p>
+        <ul className="list-none mt-3 space-y-1 text-base sm:text-lg">
+          <li>
+            Email:{' '}
+            <a
+              href="mailto:vivektripathi3405@gmail.com"
+              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+            >
+              vivektripathi3405@gmail.com
+            </a>
+          </li>
+          <li>Phone: +91 7879539174</li>
+          <li>
+            WhatsApp:{' '}
+            <a
+              href="https://wa.me/917879539174"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+            >
+              +91 7879539174
+            </a>
+          </li>
+        </ul>
       </section>
 
       {/* Footer note */}
