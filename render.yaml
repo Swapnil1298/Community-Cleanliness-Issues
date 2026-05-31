@@ -1,7 +1,8 @@
-# Render Blueprint — deploy backend + frontend
-# Docs: https://render.com/docs/blueprint-spec
+# Render Blueprint — Backend (Node/Express/MongoDB) + Frontend (React/Vite)
+# Repo: https://github.com/Swapnil1298/Community-Cleanliness-Issues
 
 services:
+  # ─── BACKEND: Node.js + Express + MongoDB + JWT ───
   - type: web
     name: community-cleanliness-api
     runtime: node
@@ -18,18 +19,24 @@ services:
         generateValue: true
       - key: GOOGLE_CLIENT_ID
         sync: false
+      - key: FRONTEND_URL
+        fromService:
+          name: community-cleanliness-web
+          type: web
+          property: host
 
+  # ─── FRONTEND: React + Vite + Tailwind ───
   - type: web
     name: community-cleanliness-web
-    runtime: static
+    runtime: node
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    startCommand: npm start
     envVars:
       - key: VITE_API_URL
-        sync: false
+        fromService:
+          name: community-cleanliness-api
+          type: web
+          property: host
+        transform: https://${host}/api
       - key: VITE_GOOGLE_CLIENT_ID
         sync: false

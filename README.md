@@ -72,39 +72,72 @@ Open **http://localhost:5173**
 
 ## Deploy to Render
 
-The repo includes a `render.yaml` blueprint for two services:
+This project uses **two Web Services** on Render:
 
-1. **community-cleanliness-api** — Node backend (`server/`)
-2. **community-cleanliness-web** — Static React site (`dist/`)
+| Service | Stack | Root directory |
+|---------|--------|----------------|
+| **community-cleanliness-api** | Node.js, Express, MongoDB, JWT | `server` |
+| **community-cleanliness-web** | React, Vite, Tailwind CSS | *(repo root)* |
 
-### Steps
+### Option A — Blueprint (recommended)
 
-1. Push this project to **your GitHub** repository.
-2. Go to [render.com](https://render.com) → **New** → **Blueprint** → connect your repo.
-3. Set these environment variables when prompted:
+1. [render.com](https://render.com) → **New** → **Blueprint**
+2. Connect **Swapnil1298/Community-Cleanliness-Issues**
+3. When prompted, set **`MONGODB_URI`** (Atlas connection string)
+4. Deploy both services from `render.yaml`
 
-**Backend (`community-cleanliness-api`):**
+### Option B — Manual setup
 
-| Variable | Example |
-|----------|---------|
-| `MONGODB_URI` | Your Atlas connection string |
-| `JWT_SECRET` | Long random secret string |
-| `GOOGLE_CLIENT_ID` | Optional |
+#### Backend Web Service
 
-**Frontend (`community-cleanliness-web`):**
+| Setting | Value |
+|---------|--------|
+| Name | `community-cleanliness-api` |
+| Root Directory | `server` |
+| Build Command | `npm install` |
+| Start Command | `npm start` |
 
-| Variable | Example |
-|----------|---------|
+**Environment variables:**
+
+| Key | Value |
+|-----|--------|
+| `MONGODB_URI` | Your MongoDB Atlas URI |
+| `JWT_SECRET` | Long random secret |
+| `FRONTEND_URL` | `https://community-cleanliness-web.onrender.com` |
+| `NODE_ENV` | `production` |
+
+**Health check:** `https://community-cleanliness-api.onrender.com/api/health` → `{"status":"ok"}`
+
+#### Frontend Web Service
+
+| Setting | Value |
+|---------|--------|
+| Name | `community-cleanliness-web` |
+| Root Directory | *(leave empty)* |
+| Build Command | `npm install && npm run build` |
+| Start Command | `npm start` |
+
+**Environment variables:**
+
+| Key | Value |
+|-----|--------|
 | `VITE_API_URL` | `https://community-cleanliness-api.onrender.com/api` |
-| `VITE_GOOGLE_CLIENT_ID` | Optional |
 
-Replace the API hostname with your actual Render backend URL after the API service is created.
+After changing `VITE_API_URL`, run **Clear build cache & deploy** (Vite bakes env vars at build time).
 
-4. Deploy. Use the **web** service URL as your public site.
+### MongoDB Atlas on Render
+
+Use the **standard** connection string if `mongodb+srv://` fails:
+
+```
+mongodb://USER:PASSWORD@ac-bstrrkw-shard-00-00.xxxxx.mongodb.net:27017,.../Community-Cleanliness-Issues?ssl=true&authSource=admin&retryWrites=true&w=majority
+```
+
+Atlas → **Network Access** → allow `0.0.0.0/0`.
 
 ### Note on profile image uploads
 
-On Render’s free tier, uploaded files are stored on **temporary disk** and may be **lost when the server restarts**. For production, consider Cloudinary or S3 later. Issues and auth still work with Atlas.
+On Render’s free tier, uploaded profile images may be lost when the server restarts. Auth, issues, and contributions in MongoDB Atlas are persistent.
 
 ---
 
