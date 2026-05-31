@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
             <Home />
           </Suspense>
         ),
-        loader: () => fetch('https://community-clen.vercel.app/latest-data'),
+        loader: () => fetch(`${import.meta.env.VITE_API_URL || '/api'}/latest-data`),
       },
       {
         path: 'allissues',
@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
             <AllIssues />
           </Suspense>
         ),
-        loader: () => fetch('https://community-clen.vercel.app/issue'),
+        loader: () => fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue`),
       },
       {
         path: 'about',
@@ -117,7 +117,7 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
         loader: ({ params }) =>
-          fetch(`https://community-clen.vercel.app/issue/${params.id}`),
+          fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
       },
       {
         path: 'contributionss/:id',
@@ -127,7 +127,7 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
         loader: ({ params }) =>
-          fetch(`https://community-clen.vercel.app/issue/${params.id}`),
+          fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
       },
       {
         path: '*',
@@ -171,7 +171,7 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
             loader: () =>
-              fetch('https://community-clen.vercel.app/allmyissues'),
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/allmyissues`),
           },
           {
             path: 'contribution',
@@ -181,7 +181,7 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
             loader: () =>
-              fetch('https://community-clen.vercel.app/contrbutessssssssssss'),
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/contrbutessssssssssss`),
           },
           {
             path: 'issue/:id',
@@ -191,7 +191,7 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
             loader: ({ params }) =>
-              fetch(`https://community-clen.vercel.app/issue/${params.id}`),
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
           },
           {
             path: 'allmyissues/:id',
@@ -202,7 +202,7 @@ export const router = createBrowserRouter([
             ),
             loader: ({ params }) =>
               fetch(
-                `https://community-clen.vercel.app/allmyissues/${params.id}`
+                `${import.meta.env.VITE_API_URL || '/api'}/allmyissues/${params.id}`
               ),
           },
           {
@@ -213,7 +213,7 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
             loader: ({ params }) =>
-              fetch(`https://community-clen.vercel.app/issue/${params.id}`),
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
           },
         ],
       },
