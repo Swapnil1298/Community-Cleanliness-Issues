@@ -16,7 +16,7 @@
     "dev": "vite",
     "dev:server": "npm run dev --prefix server",
     "build": "vite build",
-    "render-build": "npm install && npm install --prefix server && npm run build",
+    "render-build": "npm install --include=dev && npm install --prefix server && npm run build",
     "start": "node server/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
