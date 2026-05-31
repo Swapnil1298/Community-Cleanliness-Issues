@@ -1,6 +1,10 @@
 {
   "name": "community-cleanliness-api",
   "author": "Vivekanand Tripathi <vivektripathi3405@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Swapnil1298/Community-Cleanliness-Issues.git"
+  },
   "version": "1.0.0",
   "private": true,
   "type": "module",

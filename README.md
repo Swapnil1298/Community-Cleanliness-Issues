@@ -108,16 +108,28 @@ On Render’s free tier, uploaded files are stored on **temporary disk** and may
 
 ---
 
+## Repository
+
+**GitHub:** [github.com/Swapnil1298/Community-Cleanliness-Issues](https://github.com/Swapnil1298/Community-Cleanliness-Issues)
+
+---
+
 ## Publish to GitHub
+
+This project is connected to:
+
+```bash
+git remote -v
+# origin  https://github.com/Swapnil1298/Community-Cleanliness-Issues.git
+```
+
+To push updates:
 
 ```bash
 git add .
-git commit -m "Migrate to MongoDB API, JWT auth, and Render deployment config"
-git remote set-url origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-git push -u origin main
+git commit -m "Your commit message"
+git push origin main
 ```
-
-Create an empty repo on GitHub first, then replace `YOUR_USERNAME/YOUR_REPO`.
 
 ---
 
