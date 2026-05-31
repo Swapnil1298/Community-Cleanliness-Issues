@@ -24,6 +24,16 @@ app.use('/api/auth', authRouter);
 app.use('/api/issues', issuesRouter);
 app.use('/api/contributions', contributionsRouter);
 
+// ─── Serve built React/Vite frontend in production ───
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '..', 'dist');
+  app.use(express.static(distPath));
+  // All non-API routes → React app
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
 connectDB()
   .then(() => {
     app.listen(PORT, '0.0.0.0', () => {

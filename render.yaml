@@ -1,42 +1,26 @@
-# Render Blueprint — Backend (Node/Express/MongoDB) + Frontend (React/Vite)
+# Render Blueprint — Unified: Express serves API + built React/Vite frontend
 # Repo: https://github.com/Swapnil1298/Community-Cleanliness-Issues
 
 services:
-  # ─── BACKEND: Node.js + Express + MongoDB + JWT ───
+  # ─── SINGLE SERVICE: Express serves API + built React frontend ───
   - type: web
-    name: community-cleanliness-api
+    name: community-cleanliness-app
     runtime: node
-    rootDir: server
-    buildCommand: npm install
+    buildCommand: npm run render-build
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 5000
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: GOOGLE_CLIENT_ID
         sync: false
-      - key: FRONTEND_URL
-        fromService:
-          name: community-cleanliness-web
-          type: web
-          property: host
-
-  # ─── FRONTEND: React + Vite + Tailwind ───
-  - type: web
-    name: community-cleanliness-web
-    runtime: node
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    envVars:
       - key: VITE_API_URL
-        fromService:
-          name: community-cleanliness-api
-          type: web
-          property: host
-        transform: https://${host}/api
+        value: /api
       - key: VITE_GOOGLE_CLIENT_ID
         sync: false
