@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import {
   FaWhatsapp,
@@ -11,14 +11,28 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SlideOnScroll from './SlideOnScroll';
+import { AuthContext } from '../Context/AuthContext';
 
 const Contact = () => {
+  const { user } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: user?.displayName || '',
+    email: user?.email || '',
     subject: '',
     message: '',
   });
+
+  // Update form if user logs in after page loads
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.displayName || prev.name,
+        email: user.email || prev.email,
+      }));
+    }
+  }, [user]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -57,8 +71,8 @@ const Contact = () => {
         
         // Reset form
         setFormData({
-          name: '',
-          email: '',
+          name: user?.displayName || '',
+          email: user?.email || '',
           subject: '',
           message: '',
         });
