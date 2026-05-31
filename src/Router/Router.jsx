@@ -22,7 +22,7 @@ const Contact = lazy(() => import('../Pages/Contact'));
 const IssueDetails = lazy(() => import('../Pages/IssueDetails'));
 const ContributeCard = lazy(() => import('../Pages/ContributeCard'));
 const AllIssues = lazy(() => import('../Pages/AllIssuses'));
-const MYIssues = lazy(() => import('../Pages/MYIssues'));
+const MyIssuesPage = lazy(() => import('../Pages/MyIssues'));
 const NotFound = lazy(() => import('../Pages/NotFound'));
 
 export const router = createBrowserRouter([
@@ -167,7 +167,7 @@ export const router = createBrowserRouter([
             path: 'myissues',
             element: (
               <Suspense fallback={<Loading />}>
-                <MYIssues />
+                <MyIssuesPage />
               </Suspense>
             ),
             loader: () =>
