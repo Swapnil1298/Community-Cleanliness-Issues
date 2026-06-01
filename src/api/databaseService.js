@@ -46,3 +46,7 @@ export const addContribution = async (contributionData) => {
 export const getMyContributions = async (email) => {
   return request(`/contributions/user/${encodeURIComponent(email)}`);
 };
+
+export const getIssueContributors = async (issueId) => {
+  return request(`/contributions/issue/${issueId}`);
+};

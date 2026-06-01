@@ -57,6 +57,7 @@ const ContributeCard = () => {
     e.preventDefault();
 
     const contributionData = {
+      issueId: id,
       issueTitle: issue.title,
       amount: formData.amount,
       contributorName: formData.contributorName,

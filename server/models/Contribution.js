@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const contributionSchema = new mongoose.Schema(
   {
+    issueId: { type: String, default: '' },
     issueTitle: { type: String, required: true },
     amount: { type: mongoose.Schema.Types.Mixed, required: true },
     contributorName: { type: String, required: true },

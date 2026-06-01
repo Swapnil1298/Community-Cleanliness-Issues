@@ -108,31 +108,35 @@
 // export default IssueDetails;
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Tag, DollarSign, ArrowLeft } from 'lucide-react'; 
+import { Calendar, MapPin, Tag, DollarSign, ArrowLeft, Users } from 'lucide-react'; 
 import { Helmet } from 'react-helmet';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from './Loding';
-import { getIssueById } from '../api/databaseService';
+import { getIssueById, getIssueContributors } from '../api/databaseService';
 
 const IssueDetails = () => {
   const { id } = useParams();
   const [issue, setIssue] = useState(null);
+  const [contributors, setContributors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate(); 
   
   useEffect(() => {
-    const fetchIssue = async () => {
+    const fetchIssueAndContributors = async () => {
       try {
-        const data = await getIssueById(id);
-        setIssue(data);
+        const issueData = await getIssueById(id);
+        setIssue(issueData);
+        
+        const contributorsData = await getIssueContributors(id);
+        setContributors(contributorsData || []);
       } catch (error) {
-        console.error('Error fetching issue:', error);
+        console.error('Error fetching issue or contributors:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchIssue();
+    fetchIssueAndContributors();
   }, [id]);
 
   if (isLoading || !issue) {
@@ -225,7 +229,60 @@ const IssueDetails = () => {
             </p>
           </div>
 
-          <NavLink to={`/contributionss/${issue._id}`}>
+          <hr className="border-t border-gray-200 dark:border-gray-700" />
+
+          {/* Contributors Section */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Users size={24} className="text-blue-600 dark:text-blue-400" />
+              <h2 className="text-2xl font-semibold text-blue-600 dark:text-blue-400">
+                Volunteers ({contributors.length})
+              </h2>
+            </div>
+            {contributors.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {contributors.map((contributor, index) => (
+                  <div
+                    key={index}
+                    className="p-4 rounded-lg border border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20 hover:shadow-lg transition-shadow duration-300"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-base text-gray-800 dark:text-gray-100">
+                          {contributor.contributorName}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {contributor.email}
+                        </p>
+                      </div>
+                      <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        ${contributor.amount}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      <span className="font-semibold">Phone:</span> {contributor.phone}
+                    </p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      <span className="font-semibold">Location:</span> {contributor.address}
+                    </p>
+                    {contributor.additionalInfo && (
+                      <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                        "{contributor.additionalInfo}"
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-center">
+                <p className="text-gray-600 dark:text-gray-400 text-lg">
+                  No volunteers yet. Be the first to contribute and help resolve this issue!
+                </p>
+              </div>
+            )}
+          </div>
+
+          <hr className="border-t border-gray-200 dark:border-gray-700" />
             <div className="pt-6 flex justify-center">
               <button
                 className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 text-xl"

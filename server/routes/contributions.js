@@ -33,4 +33,15 @@ router.get('/user/:email', async (req, res) => {
   }
 });
 
+router.get('/issue/:issueId', async (req, res) => {
+  try {
+    const contributions = await Contribution.find({ issueId: req.params.issueId }).sort({
+      createdAt: -1,
+    });
+    res.json(contributions.map(toContributionResponse));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;
