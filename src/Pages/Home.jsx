@@ -90,36 +90,6 @@ const Home = () => {
       role: 'Retired Teacher, Kolkata',
       image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
       text: 'Empowering citizens to take action is what we need. This app does exactly that. Brilliant initiative!'
-    },
-    {
-      name: 'Sneha Gupta',
-      role: 'Student Volunteer, Pune',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'Reporting issues has never been easier. Our neighborhood looks so much cleaner now thanks to this!'
-    },
-    {
-      name: 'Vikram Deshmukh',
-      role: 'Civic Council Member, Ahmedabad',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'We use this platform to track complaints and prioritize repairs. Best tool for community management!'
-    },
-    {
-      name: 'Meera Joshi',
-      role: 'Housewife & Activist, Chennai',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'Every resident voice matters here. Finally getting heard after years of trying through other channels.'
-    },
-    {
-      name: 'Arjun Nair',
-      role: 'Social Worker, Kochi',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'An excellent way to engage youth in community development. Highly effective and user-friendly!'
-    },
-    {
-      name: 'Divya Iyer',
-      role: 'Corporate Professional, Hyderabad',
-      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'Transparency in issue resolution is what I love most. The app keeps everyone accountable. Perfect!'
     }
   ];
 
