@@ -28,7 +28,7 @@ const About = () => {
   const stats = [
     { icon: <FiUsers size={40} />, number: '15,000+', label: 'Active Community Members' },
     { icon: <MdRecycling size={40} />, number: '2,500+', label: 'Issues Successfully Resolved' },
-    { icon: <MdLocationCity size={40} />, number: '50+', label: 'Cities and Towns Covered' },
+    { icon: <MdLocationCity size={40} />, number: '50+', label: 'Indian Cities and Towns' },
     { icon: <FiAward size={40} />, number: '98%', label: 'User Satisfaction Rate' }
   ];
 
@@ -81,7 +81,7 @@ const About = () => {
             About Our Mission
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto leading-relaxed">
-            We're building a world where every community has the tools and voice to create positive change, 
+            We're empowering every Indian community with the tools and voice to solve local problems and create positive change,
             one report at a time.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -113,13 +113,12 @@ const About = () => {
                   but they often lack the right tools and platforms to coordinate their efforts effectively.
                 </p>
                 <p className="text-lg mb-6 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  Founded in 2026, our platform was born from the belief that technology should serve communities, 
-                  not the other way around. We've grown from a small team with a big vision to a global platform 
-                  serving thousands of communities worldwide.
+                  Founded in 2026, our platform was born from the belief that technology should serve Indian communities. 
+                  We're dedicated to empowering citizens across India to take action on local issues and drive community-led development.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  Today, we're proud to be the bridge between community concerns and actionable solutions, 
-                  helping neighbors connect, collaborate, and create lasting positive change.
+                  Today, we're proud to be the bridge between Indian communities and actionable solutions, 
+                  helping neighbors across India connect, collaborate, and create lasting positive change in their localities.
                 </p>
               </div>
             </SlideOnScroll>

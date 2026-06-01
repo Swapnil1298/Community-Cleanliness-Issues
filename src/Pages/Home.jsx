@@ -37,7 +37,7 @@ const Home = () => {
   const stats = [
     { icon: <FiUsers size={40} />, number: '15,000+', label: 'Active Users' },
     { icon: <MdRecycling size={40} />, number: '2,500+', label: 'Issues Resolved' },
-    { icon: <MdLocationCity size={40} />, number: '50+', label: 'Cities Covered' },
+    { icon: <MdLocationCity size={40} />, number: '50+', label: 'Indian Cities Covered' },
     { icon: <FiAward size={40} />, number: '98%', label: 'Success Rate' }
   ];
 
@@ -122,9 +122,9 @@ const Home = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6" style={{ color: 'var(--text-color)' }}>
             <Typewriter
               words={[
-                'Welcome to Community Care',
-                'Report Issues, Create Change',
-                'Building Better Communities Together'
+                'Welcome to India Community Care',
+                'Report Issues, Drive Change',
+                'Building Better Indian Communities'
               ]}
               loop={true}
               cursor
@@ -134,9 +134,12 @@ const Home = () => {
               delaySpeed={2000}
             />
           </h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: 'var(--text-color)' }}>
+            Welcome to India's Community Care Platform
+          </h1>
           <p className="text-lg sm:text-xl md:text-xl max-w-3xl mx-auto leading-relaxed mb-6 md:mb-8 px-2" style={{ color: 'var(--text-secondary)' }}>
-            Join thousands of community members working together to identify, report, and resolve local issues. 
-            From cleanliness concerns to infrastructure problems, your voice matters in creating positive change.
+            Join thousands of community members across India working together to identify, report, and resolve local issues. 
+            From cleanliness concerns to infrastructure problems, your voice matters in creating positive change in your neighborhood.
           </p>
           {!user && (
             <div className="mt-6 md:mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
