@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#skyGrad)"/>
+  <rect y="280" width="600" height="120" fill="#8B7355"/>
+  
+  <!-- Garbage bags -->
+  <ellipse cx="150" cy="280" rx="40" ry="30" fill="#333"/>
+  <path d="M 110 280 Q 110 250 150 240 Q 190 250 190 280" fill="#333"/>
+  
+  <ellipse cx="300" cy="290" rx="50" ry="35" fill="#2d2d2d"/>
+  <path d="M 250 290 Q 250 255 300 240 Q 350 255 350 290" fill="#2d2d2d"/>
+  
+  <ellipse cx="450" cy="285" rx="45" ry="32" fill="#333"/>
+  <path d="M 405 285 Q 405 255 450 240 Q 495 255 495 285" fill="#333"/>
+  
+  <!-- Scattered waste -->
+  <circle cx="120" cy="300" r="8" fill="#666"/>
+  <circle cx="180" cy="310" r="6" fill="#555"/>
+  <circle cx="330" cy="320" r="7" fill="#666"/>
+  <circle cx="420" cy="305" r="5" fill="#555"/>
+  
+  <!-- Warning sign -->
+  <rect x="500" y="200" width="60" height="80" fill="#FFD700" stroke="#FF6B00" stroke-width="2"/>
+  <text x="530" y="250" font-size="24" font-weight="bold" fill="#FF6B00" text-anchor="middle">!</text>
+  
+  <!-- Title -->
+  <text x="300" y="30" font-size="28" font-weight="bold" fill="#333" text-anchor="middle">Garbage Issue</text>
+</svg>

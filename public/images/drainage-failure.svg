@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#skyGrad)"/>
+  
+  <!-- Ground -->
+  <rect y="280" width="600" height="120" fill="#8B7355"/>
+  
+  <!-- Stagnant water -->
+  <ellipse cx="200" cy="310" rx="80" ry="30" fill="#3a3a5c" opacity="0.8"/>
+  <ellipse cx="400" cy="320" rx="100" ry="35" fill="#3a3a5c" opacity="0.8"/>
+  
+  <!-- Water ripples -->
+  <circle cx="200" cy="310" r="40" fill="none" stroke="#2d2d4d" stroke-width="1" opacity="0.5"/>
+  <circle cx="200" cy="310" r="55" fill="none" stroke="#2d2d4d" stroke-width="1" opacity="0.3"/>
+  <circle cx="400" cy="320" r="50" fill="none" stroke="#2d2d4d" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Drain pipe (broken) -->
+  <rect x="280" y="260" width="40" height="50" fill="#666" stroke="#333" stroke-width="2"/>
+  <rect x="290" y="250" width="20" height="20" fill="#333"/>
+  
+  <!-- Water flowing out -->
+  <path d="M 300 310 Q 295 330 290 350" stroke="#3a3a5c" stroke-width="4" fill="none" opacity="0.7"/>
+  <path d="M 310 315 Q 315 335 320 355" stroke="#3a3a5c" stroke-width="4" fill="none" opacity="0.7"/>
+  
+  <!-- Mosquito warning -->
+  <circle cx="120" cy="200" r="8" fill="#333"/>
+  <line x1="120" y1="188" x2="120" y2="175" stroke="#333" stroke-width="1"/>
+  <line x1="108" y1="192" x2="100" y2="185" stroke="#333" stroke-width="1"/>
+  <line x1="132" y1="192" x2="140" y2="185" stroke="#333" stroke-width="1"/>
+  
+  <!-- Danger symbol -->
+  <circle cx="480" cy="200" r="35" fill="#FFD700" stroke="#FF0000" stroke-width="3"/>
+  <text x="480" y="215" font-size="48" font-weight="bold" fill="#FF0000" text-anchor="middle">!</text>
+  
+  <!-- Foul smell indicator -->
+  <path d="M 350 150 Q 355 130 360 150" fill="#999" opacity="0.6"/>
+  <path d="M 340 160 Q 345 135 350 160" fill="#999" opacity="0.6"/>
+  <path d="M 360 160 Q 365 135 370 160" fill="#999" opacity="0.6"/>
+  
+  <!-- Title -->
+  <text x="300" y="30" font-size="28" font-weight="bold" fill="#333" text-anchor="middle">Drainage System Failure</text>
+</svg>

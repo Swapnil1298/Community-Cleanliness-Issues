@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#skyGrad)"/>
+  
+  <!-- Road surface -->
+  <rect y="250" width="600" height="150" fill="#4a4a4a"/>
+  
+  <!-- Road markings -->
+  <line x1="0" y1="325" x2="600" y2="325" stroke="#FFD700" stroke-width="3" stroke-dasharray="40,20"/>
+  
+  <!-- Potholes -->
+  <ellipse cx="150" cy="300" rx="50" ry="35" fill="#1a1a1a"/>
+  <path d="M 100 300 Q 100 270 150 265 Q 200 270 200 300" fill="#0d0d0d"/>
+  
+  <ellipse cx="350" cy="310" rx="60" ry="40" fill="#1a1a1a"/>
+  <path d="M 290 310 Q 280 270 350 260 Q 420 270 410 310" fill="#0d0d0d"/>
+  
+  <ellipse cx="500" cy="295" rx="45" ry="32" fill="#1a1a1a"/>
+  <path d="M 455 295 Q 450 265 500 258 Q 545 265 545 295" fill="#0d0d0d"/>
+  
+  <!-- Damaged asphalt cracks -->
+  <path d="M 0 250 Q 50 255 100 250" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M 200 250 Q 250 260 300 250" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M 400 250 Q 450 255 500 250" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- Vehicle approach -->
+  <rect x="450" y="120" width="100" height="50" fill="#333" rx="5"/>
+  <circle cx="470" cy="170" r="12" fill="#111"/>
+  <circle cx="530" cy="170" r="12" fill="#111"/>
+  <rect x="465" y="135" width="60" height="20" fill="#666"/>
+  
+  <!-- Exclamation mark -->
+  <circle cx="80" cy="180" r="25" fill="#FFD700" stroke="#FF0000" stroke-width="2"/>
+  <text x="80" y="195" font-size="36" font-weight="bold" fill="#FF0000" text-anchor="middle">!</text>
+  
+  <!-- Title -->
+  <text x="300" y="30" font-size="28" font-weight="bold" fill="#333" text-anchor="middle">Pothole Damage</text>
+</svg>
