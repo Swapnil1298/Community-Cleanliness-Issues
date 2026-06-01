@@ -68,7 +68,7 @@ const About = () => {
   ];
 
   const milestones = [
-    { year: '2020', title: 'Platform Launch', description: 'Started with 5 communities and 100 users' },
+    { year: '2026', title: 'Platform Launch', description: 'Started with 5 communities and 100 users' },
     { year: '2021', title: 'Rapid Growth', description: 'Expanded to 20 cities with 5,000+ active users' },
     { year: '2022', title: 'Major Impact', description: 'Helped resolve 1,000+ community issues' },
     { year: '2023', title: 'Recognition', description: 'Won Community Impact Award' },
@@ -121,7 +121,7 @@ const About = () => {
                   but they often lack the right tools and platforms to coordinate their efforts effectively.
                 </p>
                 <p className="text-lg mb-6 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  Founded in 2020, our platform was born from the belief that technology should serve communities, 
+                  Founded in 2026, our platform was born from the belief that technology should serve communities, 
                   not the other way around. We've grown from a small team with a big vision to a global platform 
                   serving thousands of communities worldwide.
                 </p>
