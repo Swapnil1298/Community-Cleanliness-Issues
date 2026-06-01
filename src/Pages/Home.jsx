@@ -68,22 +68,58 @@ const Home = () => {
   // Testimonials data
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      role: 'Community Leader',
+      name: 'Priya Sharma',
+      role: 'Community Leader, Delhi',
       image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'This platform has transformed how our community addresses local issues. Highly recommended!'
+      text: 'This platform has transformed how our community addresses local issues. The response time is incredible!'
     },
     {
-      name: 'Mike Chen',
-      role: 'Local Resident',
+      name: 'Aarav Patel',
+      role: 'Local Resident, Mumbai',
       image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'Finally, a way to make our voices heard and see real change in our neighborhood.'
+      text: 'Finally, a way to make our voices heard and see real change in our neighborhood. Truly amazing!'
     },
     {
-      name: 'Emma Davis',
-      role: 'Environmental Activist',
+      name: 'Anjali Verma',
+      role: 'Environmental Activist, Bangalore',
       image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
-      text: 'The impact tracking feature helps us measure our environmental improvements.'
+      text: 'The impact tracking feature helps us measure our environmental improvements. Love it!'
+    },
+    {
+      name: 'Rajesh Kumar Singh',
+      role: 'Retired Teacher, Kolkata',
+      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
+      text: 'Empowering citizens to take action is what we need. This app does exactly that. Brilliant initiative!'
+    },
+    {
+      name: 'Sneha Gupta',
+      role: 'Student Volunteer, Pune',
+      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
+      text: 'Reporting issues has never been easier. Our neighborhood looks so much cleaner now thanks to this!'
+    },
+    {
+      name: 'Vikram Deshmukh',
+      role: 'Civic Council Member, Ahmedabad',
+      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
+      text: 'We use this platform to track complaints and prioritize repairs. Best tool for community management!'
+    },
+    {
+      name: 'Meera Joshi',
+      role: 'Housewife & Activist, Chennai',
+      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
+      text: 'Every resident voice matters here. Finally getting heard after years of trying through other channels.'
+    },
+    {
+      name: 'Arjun Nair',
+      role: 'Social Worker, Kochi',
+      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
+      text: 'An excellent way to engage youth in community development. Highly effective and user-friendly!'
+    },
+    {
+      name: 'Divya Iyer',
+      role: 'Corporate Professional, Hyderabad',
+      image: 'https://i.ibb.co/2Z3p8wN/default-user.png',
+      text: 'Transparency in issue resolution is what I love most. The app keeps everyone accountable. Perfect!'
     }
   ];
 
