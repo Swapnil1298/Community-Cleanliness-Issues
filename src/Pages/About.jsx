@@ -199,7 +199,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Timeline Section */}
+      {/* Simple Journey Section */}
       <section className="py-16" style={{ backgroundColor: 'var(--bg-color)' }}>
         <div className="max-w-6xl mx-auto px-4">
           <SlideOnScroll>
@@ -207,58 +207,22 @@ const About = () => {
               Our Journey
             </h2>
           </SlideOnScroll>
-          <div className="relative">
-            {/* Animated Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 via-blue-600 to-blue-800 animate-pulse"></div>
-            
-            <div className="space-y-16">
-              {milestones.map((milestone, index) => (
-                <SlideOnScroll key={index}>
-                  <div className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} group`}>
-                    <div className="w-1/2 px-8">
-                      <div className={`${index % 2 === 0 ? 'text-right' : 'text-left'} transform transition-all duration-700 group-hover:scale-105`}>
-                        {/* Animated Year Badge */}
-                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full inline-block text-sm font-semibold mb-4 shadow-lg transform transition-all duration-500 hover:scale-110 hover:shadow-xl animate-bounce">
-                          {milestone.year}
-                        </div>
-                        
-                        {/* Animated Title */}
-                        <h3 className="text-2xl font-bold mb-3 transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-blue-600" style={{ color: 'var(--text-color)' }}>
-                          {milestone.title}
-                        </h3>
-                        
-                        {/* Animated Description */}
-                        <p className="text-lg leading-relaxed transform transition-all duration-700 group-hover:translate-x-1" style={{ color: 'var(--text-secondary)' }}>
-                          {milestone.description}
-                        </p>
-                        
-                        {/* Animated Decorative Line */}
-                        <div className={`w-16 h-1 bg-gradient-to-r from-blue-500 to-green-500 mt-4 transform transition-all duration-700 group-hover:w-24 ${index % 2 === 0 ? 'ml-auto' : 'mr-auto'}`}></div>
-                      </div>
-                    </div>
-                    
-                    {/* Enhanced Timeline Dot */}
-                    <div className="relative z-10">
-                      <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full border-4 border-white shadow-xl transform transition-all duration-500 group-hover:scale-150 group-hover:rotate-180 animate-pulse"></div>
-                      
-                      {/* Animated Ring Around Dot */}
-                      <div className="absolute inset-0 w-6 h-6 border-2 border-blue-400 rounded-full animate-ping opacity-75"></div>
-                      
-                      {/* Hover Effect Ring */}
-                      <div className="absolute inset-0 w-6 h-6 border-2 border-transparent rounded-full group-hover:border-blue-300 group-hover:scale-200 transition-all duration-500"></div>
-                    </div>
-                    
-                    <div className="w-1/2"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {milestones.map((milestone, index) => (
+              <SlideOnScroll key={index}>
+                <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-3">
+                    {milestone.year}
                   </div>
-                </SlideOnScroll>
-              ))}
-            </div>
-            
-            {/* Floating Animation Elements */}
-            <div className="absolute top-10 left-10 w-4 h-4 bg-blue-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '0s' }}></div>
-            <div className="absolute top-32 right-16 w-3 h-3 bg-green-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1s' }}></div>
-            <div className="absolute bottom-20 left-20 w-5 h-5 bg-blue-300 rounded-full animate-bounce opacity-60" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute bottom-40 right-12 w-2 h-2 bg-green-300 rounded-full animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
+                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-color)' }}>
+                    {milestone.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    {milestone.description}
+                  </p>
+                </div>
+              </SlideOnScroll>
+            ))}
           </div>
         </div>
       </section>
