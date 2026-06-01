@@ -283,6 +283,8 @@ const IssueDetails = () => {
           </div>
 
           <hr className="border-t border-gray-200 dark:border-gray-700" />
+          
+          <NavLink to={`/contributionss/${issue._id}`}>
             <div className="pt-6 flex justify-center">
               <button
                 className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 text-xl"
