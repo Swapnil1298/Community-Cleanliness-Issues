@@ -67,14 +67,6 @@ const About = () => {
     }
   ];
 
-  const milestones = [
-    { year: '2026', title: 'Platform Launch', description: 'Started with 5 communities and 100 users' },
-    { year: '2021', title: 'Rapid Growth', description: 'Expanded to 20 cities with 5,000+ active users' },
-    { year: '2022', title: 'Major Impact', description: 'Helped resolve 1,000+ community issues' },
-    { year: '2023', title: 'Recognition', description: 'Won Community Impact Award' },
-    { year: '2024', title: 'Global Reach', description: 'Now serving 50+ cities worldwide' }
-  ];
-
   return (
     <div className="pt-12">
       <Helmet>
@@ -192,34 +184,6 @@ const About = () => {
                       {value.description}
                     </p>
                   </div>
-                </div>
-              </SlideOnScroll>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Simple Journey Section */}
-      <section className="py-16" style={{ backgroundColor: 'var(--bg-color)' }}>
-        <div className="max-w-6xl mx-auto px-4">
-          <SlideOnScroll>
-            <h2 className="text-4xl font-bold text-center mb-12" style={{ color: 'var(--text-color)' }}>
-              Our Journey
-            </h2>
-          </SlideOnScroll>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {milestones.map((milestone, index) => (
-              <SlideOnScroll key={index}>
-                <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-3">
-                    {milestone.year}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-color)' }}>
-                    {milestone.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                    {milestone.description}
-                  </p>
                 </div>
               </SlideOnScroll>
             ))}
