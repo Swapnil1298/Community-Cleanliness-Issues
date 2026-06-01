@@ -7,6 +7,7 @@ import corsMiddleware from './config/cors.js';
 import issuesRouter from './routes/issues.js';
 import contributionsRouter from './routes/contributions.js';
 import authRouter from './routes/auth.js';
+import { seedSampleIssues } from './seeds/sampleIssues.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -35,7 +36,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 connectDB()
-  .then(() => {
+  .then(async () => {
+    // Seed sample issues if needed
+    await seedSampleIssues();
+    
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
       if (process.env.FRONTEND_URL) {
