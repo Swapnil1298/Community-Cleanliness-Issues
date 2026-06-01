@@ -40,7 +40,7 @@ const ALLCARD = ({ allissues}) => {
                   </p>
                   <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                     <span className="font-medium text-red-600 dark:text-red-400">Amount:</span>{' '}
-                    <span className="text-lg font-bold text-blue-600 dark:text-blue-400">${issue.amount}</span>
+                    <span className="text-lg font-bold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
                   </p>
                 </div>
               </div>

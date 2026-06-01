@@ -7,7 +7,7 @@ const sampleIssues = [
     location: 'Delhi, India',
     description: 'Large amounts of uncollected garbage piled up in the market area for over a week. This is causing serious health hazards and foul smell affecting local residents and businesses.',
     image: 'https://images.unsplash.com/photo-1584622181563-430f63602d4b?w=600&h=400&fit=crop',
-    amount: 500,
+    amount: 41500,
     status: 'ongoing',
     date: '2026-06-01',
     email: 'admin@communitycleanliness.com'
@@ -18,7 +18,7 @@ const sampleIssues = [
     location: 'Mumbai, India',
     description: 'Multiple street lights on Marine Drive have been non-functional for the past 2 months. This is creating safety concerns for commuters traveling at night.',
     image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop',
-    amount: 300,
+    amount: 24900,
     status: 'ongoing',
     date: '2026-06-01',
     email: 'admin@communitycleanliness.com'
@@ -29,7 +29,7 @@ const sampleIssues = [
     location: 'Bangalore, India',
     description: 'Multiple large potholes have appeared on the main street near the central business district. Vehicles are struggling to navigate safely, causing traffic congestion.',
     image: 'https://images.unsplash.com/photo-1581092162562-40038f56c239?w=600&h=400&fit=crop',
-    amount: 1000,
+    amount: 83000,
     status: 'ongoing',
     date: '2026-06-01',
     email: 'admin@communitycleanliness.com'
@@ -40,7 +40,7 @@ const sampleIssues = [
     location: 'Kolkata, India',
     description: 'Unauthorized construction work is underway in a protected park area. This is destroying green space and violating environmental regulations.',
     image: 'https://images.unsplash.com/photo-1581092161562-40038f56c240?w=600&h=400&fit=crop',
-    amount: 750,
+    amount: 62250,
     status: 'ongoing',
     date: '2026-06-01',
     email: 'admin@communitycleanliness.com'
@@ -51,7 +51,7 @@ const sampleIssues = [
     location: 'Chennai, India',
     description: 'The drainage system in the residential area has completely failed, causing water stagnation and foul smell. This is creating breeding grounds for diseases.',
     image: 'https://images.unsplash.com/photo-1581092916550-e323b3c0a7c2?w=600&h=400&fit=crop',
-    amount: 1200,
+    amount: 99600,
     status: 'ongoing',
     date: '2026-06-01',
     email: 'admin@communitycleanliness.com'
@@ -62,7 +62,7 @@ const sampleIssues = [
     location: 'Pune, India',
     description: 'Most benches in the community park are broken and unsafe. They need immediate replacement to ensure safety for senior citizens and children.',
     image: 'https://images.unsplash.com/photo-1581092160562-40038f56c241?w=600&h=400&fit=crop',
-    amount: 400,
+    amount: 33200,
     status: 'ongoing',
     date: '2026-06-01',
     email: 'admin@communitycleanliness.com'
