@@ -94,10 +94,10 @@ const Home = () => {
   ];
 
   const categories = [
-    { title: 'Garbage', icon: '🗑️', bgColor: 'bg-green-500', count: '450+' },
-    { title: 'Illegal Construction', icon: '🏗️', bgColor: 'bg-blue-500', count: '230+' },
-    { title: 'Broken Public Property', icon: '🚧', bgColor: 'bg-yellow-500', count: '180+' },
-    { title: 'Road Damage', icon: '🛣️', bgColor: 'bg-red-500', count: '320+' },
+    { title: 'Garbage', icon: '🗑️', bgColor: 'bg-green-500', count: '28' },
+    { title: 'Illegal Construction', icon: '🏗️', bgColor: 'bg-blue-500', count: '12' },
+    { title: 'Broken Public Property', icon: '🚧', bgColor: 'bg-yellow-500', count: '16' },
+    { title: 'Road Damage', icon: '🛣️', bgColor: 'bg-red-500', count: '21' },
   ];
 
   return (
@@ -200,7 +200,7 @@ const Home = () => {
                 <div className={`flex flex-col items-center justify-center p-4 md:p-6 rounded-xl text-white ${cat.bgColor} shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:-translate-y-3 cursor-pointer h-40 md:h-48 w-full`}>
                   <span className="text-3xl md:text-4xl mb-2 md:mb-3 transform transition-transform duration-300 hover:scale-125 hover:rotate-12">{cat.icon}</span>
                   <h3 className="text-base md:text-lg font-semibold mb-1 md:mb-2 text-center">{cat.title}</h3>
-                  <p className="text-xs md:text-sm opacity-90 text-center">{cat.count} reported</p>
+                  <p className="text-xs md:text-sm opacity-90 text-center">{cat.count} reports since 2026</p>
                 </div>
               </SlideOnScroll>
             ))}
