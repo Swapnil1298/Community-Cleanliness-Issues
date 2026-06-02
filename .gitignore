@@ -27,3 +27,5 @@ config.bat
 server/.env
 server/uploads/profiles/*
 !server/uploads/profiles/.gitkeep
+server/uploads/issues/*
+!server/uploads/issues/.gitkeep
