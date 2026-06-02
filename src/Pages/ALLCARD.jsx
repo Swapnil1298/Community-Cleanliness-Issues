@@ -2,6 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
 
+const categoryImages = {
+  Cleanliness:
+    'https://images.unsplash.com/photo-1605600659873-d808a13e4d2a?auto=format&fit=crop&w=900&q=80',
+  'Garbage Management':
+    'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=900&q=80',
+  'Public Space':
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+  'Road Damager':
+    'https://images.unsplash.com/photo-1515165562835-c3b8c37b0f7d?auto=format&fit=crop&w=900&q=80',
+};
+
+const defaultIssueImage =
+  'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=80';
+
+const getIssueImage = (issue) => {
+  return issue.image || categoryImages[issue.category] || defaultIssueImage;
+};
+
 const ALLCARD = ({ allissues}) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-6 pb-10">
@@ -17,9 +35,13 @@ const ALLCARD = ({ allissues}) => {
             {/* Image Section */}
             <div className="w-full aspect-[16/9] overflow-hidden">
               <img
-                src={issue.image}
+                src={getIssueImage(issue)}
                 alt={issue.title}
                 className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = categoryImages[issue.category] || defaultIssueImage;
+                }}
               />
             </div>
 
