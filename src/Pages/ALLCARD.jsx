@@ -36,7 +36,7 @@ const ALLCARD = ({ allissues}) => {
       {Array.isArray(allissues) &&
         allissues.map((issue) => (
           <div
-            key={issue._id}
+            key={issue.id || issue._id}
             className="rounded-xl shadow-lg hover:shadow-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-500 flex flex-col h-full transform hover:scale-105 hover:-translate-y-2"
             style={{ backgroundColor: 'var(--bg-color)' }}
           >
@@ -78,7 +78,7 @@ const ALLCARD = ({ allissues}) => {
               {/* Button Section */}
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <Link
-                  to={`/issue/${issue._id}`}
+                  to={`/issue/${issue.id || issue._id}`}
                   className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1"
                 >
                   See Details <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />

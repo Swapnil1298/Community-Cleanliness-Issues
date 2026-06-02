@@ -30,6 +30,20 @@ export const uploadProfileImage = async (file) => {
   });
 };
 
+export const uploadResolutionFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const API_BASE = import.meta.env.VITE_API_URL || '/api';
+  return fetch(`${API_BASE}/upload/resolution`, {
+    method: 'POST',
+    body: formData,
+  }).then(res => {
+    if (!res.ok) throw new Error('Upload failed');
+    return res.json();
+  });
+};
+
 export const addIssue = async (formData) => {
   return request('/issues', {
     method: 'POST',

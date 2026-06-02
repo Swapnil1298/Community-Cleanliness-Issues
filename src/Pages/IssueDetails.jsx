@@ -147,6 +147,13 @@ const IssueDetails = () => {
     );
   }
 
+  const totalContributed = contributors.reduce(
+    (sum, contributor) => sum + (Number(contributor.amount) || 0),
+    0
+  );
+  const progressUpdates = Array.isArray(issue.progressUpdates) ? issue.progressUpdates : [];
+  const hasResolutionProof = Boolean(issue.afterImage && issue.receiptUrl);
+
   return (
     <div className="min-h-screen py-5 mt-14 px-6">
       <title>IssueDetails| Community Cleanliness</title>
@@ -231,6 +238,90 @@ const IssueDetails = () => {
 
           <hr className="border-t border-gray-200 dark:border-gray-700" />
 
+          <div>
+            <h2 className="text-2xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
+              Transparency & Proof
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Issue-wise contributions</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">Rs. {totalContributed}</p>
+              </div>
+              <div className="rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4">
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Resolution proof</p>
+                <p className="text-lg font-semibold text-green-700 dark:text-green-300">
+                  {hasResolutionProof ? 'Uploaded' : 'Pending'}
+                </p>
+              </div>
+              <div className="rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20 p-4">
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Verification</p>
+                <p className="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                  {issue.verificationStatus || 'not_submitted'}
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-4">
+              <h3 className="font-semibold mb-2" style={{ color: 'var(--text-color)' }}>
+                Refund or reallocation policy
+              </h3>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                {issue.refundPolicy || 'Contributors may request a refund or reallocation if this issue is not resolved.'}
+              </p>
+            </div>
+
+            {(issue.beforeImage || issue.afterImage || issue.receiptUrl) && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                {issue.beforeImage && (
+                  <a href={issue.beforeImage} target="_blank" rel="noreferrer" className="block rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <img src={issue.beforeImage} alt="Before issue proof" className="h-40 w-full object-cover" />
+                    <span className="block p-2 text-sm font-medium" style={{ color: 'var(--text-color)' }}>Before photo</span>
+                  </a>
+                )}
+                {issue.afterImage && (
+                  <a href={issue.afterImage} target="_blank" rel="noreferrer" className="block rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <img src={issue.afterImage} alt="After resolution proof" className="h-40 w-full object-cover" />
+                    <span className="block p-2 text-sm font-medium" style={{ color: 'var(--text-color)' }}>After photo</span>
+                  </a>
+                )}
+                {issue.receiptUrl && (
+                  <a href={issue.receiptUrl} target="_blank" rel="noreferrer" className="flex min-h-40 flex-col justify-center rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-blue-400">
+                    <span className="text-lg font-semibold text-blue-600 dark:text-blue-400">Receipt / Bill</span>
+                    <span className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
+                      {issue.receiptNote || 'Open uploaded spending proof'}
+                    </span>
+                  </a>
+                )}
+              </div>
+            )}
+
+            <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+              <h3 className="font-semibold mb-3" style={{ color: 'var(--text-color)' }}>
+                Progress updates
+              </h3>
+              {progressUpdates.length > 0 ? (
+                <div className="space-y-3">
+                  {progressUpdates.map((update, index) => (
+                    <div key={index} className="border-l-4 border-blue-500 pl-3">
+                      <p className="text-sm font-medium" style={{ color: 'var(--text-color)' }}>
+                        {update.date}
+                      </p>
+                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {update.note}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  No progress updates have been posted yet.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <hr className="border-t border-gray-200 dark:border-gray-700" />
+
           {/* Contributors Section */}
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -270,6 +361,17 @@ const IssueDetails = () => {
                         "{contributor.additionalInfo}"
                       </p>
                     )}
+                    <div className="mt-3 rounded-md bg-white/70 dark:bg-gray-800/70 p-3 text-sm">
+                      <p className="text-gray-700 dark:text-gray-300">
+                        <span className="font-semibold">Purpose:</span> {contributor.purpose || 'For resolving this specific issue only'}
+                      </p>
+                      <p className="text-gray-700 dark:text-gray-300">
+                        <span className="font-semibold">Fund status:</span> {contributor.fundStatus || 'recorded'}
+                      </p>
+                      <p className="text-gray-700 dark:text-gray-300">
+                        <span className="font-semibold">Refund preference:</span> {contributor.refundPreference || 'contact_me'}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -284,7 +386,7 @@ const IssueDetails = () => {
 
           <hr className="border-t border-gray-200 dark:border-gray-700" />
           
-          <NavLink to={`/contributionss/${issue._id}`}>
+          <NavLink to={`/contributionss/${issue.id}`}>
             <div className="pt-6 flex justify-center">
               <button
                 className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 text-xl"

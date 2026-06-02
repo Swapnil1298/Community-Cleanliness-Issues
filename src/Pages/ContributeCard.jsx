@@ -37,6 +37,8 @@ const ContributeCard = () => {
     address: '',
     amount: '',
     additionalInfo: '',
+    purpose: 'For resolving this specific issue only',
+    refundPreference: 'contact_me',
   });
 
   // Set default amount when issue loads
@@ -66,6 +68,8 @@ const ContributeCard = () => {
       address: formData.address,
       date: today,
       additionalInfo: formData.additionalInfo,
+      purpose: formData.purpose,
+      refundPreference: formData.refundPreference,
     };
 
     try {
@@ -147,6 +151,15 @@ const ContributeCard = () => {
             <p className="text-sm sm:text-base mb-6" style={{ color: 'var(--text-secondary)' }}>
               {issue.description}
             </p>
+
+            <div className="mb-6 rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
+              <h2 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                Transparency guarantee
+              </h2>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                Your contribution is recorded against this issue only. The issue cannot be marked resolved until an after photo and receipt or bill are uploaded.
+              </p>
+            </div>
 
             <button
               onClick={() => {
@@ -319,6 +332,43 @@ const ContributeCard = () => {
                   placeholder="Any extra details..."
                   className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm sm:text-base min-h-[80px] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
                 ></textarea>
+              </div>
+
+              <div>
+                <label className="block font-medium mb-1 text-sm sm:text-base" style={{ color: 'var(--text-color)' }}>
+                  Contribution Purpose
+                </label>
+                <input
+                  type="text"
+                  name="purpose"
+                  value={formData.purpose}
+                  onChange={handleChange}
+                  className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block font-medium mb-1 text-sm sm:text-base" style={{ color: 'var(--text-color)' }}>
+                  If the issue is not resolved
+                </label>
+                <select
+                  name="refundPreference"
+                  value={formData.refundPreference}
+                  onChange={handleChange}
+                  className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
+                  required
+                >
+                  <option value="contact_me">Contact me before any action</option>
+                  <option value="refund">Request refund</option>
+                  <option value="reallocate">Reallocate to another verified issue</option>
+                </select>
+              </div>
+
+              <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-3">
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  The platform stores this issue-wise contribution record, refund preference, and fund status for transparency.
+                </p>
               </div>
 
               <button

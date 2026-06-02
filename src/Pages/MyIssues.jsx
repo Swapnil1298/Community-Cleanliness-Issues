@@ -5,7 +5,7 @@ import { FiEdit, FiTrash2, FiEye, FiCalendar, FiMapPin, FiDollarSign, FiTag, FiC
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getMyIssues, updateIssue, deleteIssue } from '../api/databaseService';
+import { getMyIssues, updateIssue, deleteIssue, uploadResolutionFile } from '../api/databaseService';
 import Loading from './Loding';
 
 const MYIssues = () => {
@@ -81,23 +81,51 @@ const MYIssues = () => {
     setIsUpdating(true);
 
     const form = e.target;
-    const updatedData = {
-      title: form.title.value,
-      category: form.category.value,
-      amount: Number(form.amount.value),
-      description: form.description.value,
-      status: form.status.value,
-    };
 
     try {
-      await updateIssue(selectedIssue.id, updatedData);
+      const uploadIfSelected = async (fieldName, currentValue = '') => {
+        const file = form[fieldName]?.files?.[0];
+        if (!file) return currentValue;
+        const response = await uploadResolutionFile(file);
+        return response.fileUrl || response.imageUrl || response.filePath || currentValue;
+      };
+
+      const beforeImage = await uploadIfSelected('beforeImage', selectedIssue.beforeImage || '');
+      const afterImage = await uploadIfSelected('afterImage', selectedIssue.afterImage || '');
+      const receiptUrl = await uploadIfSelected('receiptUrl', selectedIssue.receiptUrl || '');
+      const progressUpdates = form.progressUpdates.value
+        .split('\n')
+        .map((note) => note.trim())
+        .filter(Boolean)
+        .map((note) => ({
+          note,
+          date: new Date().toLocaleDateString(),
+        }));
+
+      const updatedData = {
+        title: form.title.value,
+        category: form.category.value,
+        amount: Number(form.amount.value),
+        description: form.description.value,
+        status: form.status.value,
+        beforeImage,
+        afterImage,
+        receiptUrl,
+        receiptNote: form.receiptNote.value,
+        verificationStatus: form.verificationStatus.value,
+        verifiedBy: form.verifiedBy.value,
+        refundPolicy: form.refundPolicy.value,
+        progressUpdates,
+      };
+
+      const updatedIssue = await updateIssue(selectedIssue.id, updatedData);
       toast.success('Issue updated successfully!', {
         position: 'top-right',
       });
       setMyIssues(
         myIssues.map((issue) =>
           issue.id === selectedIssue.id
-            ? { ...issue, ...updatedData }
+            ? { ...issue, ...updatedIssue }
             : issue
         )
       );
@@ -105,7 +133,7 @@ const MYIssues = () => {
       setSelectedIssue(null);
     } catch (err) {
       console.error('Update error:', err);
-      toast.error('Failed to update issue.', { position: 'top-right' });
+      toast.error(err.message || 'Failed to update issue.', { position: 'top-right' });
     } finally {
       setIsUpdating(false);
     }
@@ -365,6 +393,26 @@ const MYIssues = () => {
                     </span>
                   </div>
                 </div>
+
+                <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
+                  <h4 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">
+                    Transparency proof
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <p style={{ color: 'var(--text-secondary)' }}>
+                      <span className="font-medium">After photo:</span> {selectedIssue.afterImage ? 'Uploaded' : 'Pending'}
+                    </p>
+                    <p style={{ color: 'var(--text-secondary)' }}>
+                      <span className="font-medium">Receipt / bill:</span> {selectedIssue.receiptUrl ? 'Uploaded' : 'Pending'}
+                    </p>
+                    <p style={{ color: 'var(--text-secondary)' }}>
+                      <span className="font-medium">Verification:</span> {selectedIssue.verificationStatus || 'not_submitted'}
+                    </p>
+                    <p style={{ color: 'var(--text-secondary)' }}>
+                      <span className="font-medium">Verified by:</span> {selectedIssue.verifiedBy || 'Not added'}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -458,6 +506,132 @@ const MYIssues = () => {
                     <option value="ended">Ended</option>
                     <option value="resolved">Resolved</option>
                   </select>
+                  <p className="mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    Resolved status is allowed only after uploading an after photo and receipt or bill.
+                  </p>
+                </div>
+
+                <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4 space-y-4">
+                  <h4 className="font-semibold text-blue-600 dark:text-blue-400">
+                    Resolution proof and transparency
+                  </h4>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Before Photo
+                    </label>
+                    <input
+                      type="file"
+                      name="beforeImage"
+                      accept="image/*"
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    />
+                    {selectedIssue.beforeImage && (
+                      <a href={selectedIssue.beforeImage} target="_blank" rel="noreferrer" className="mt-1 inline-block text-sm text-blue-600 dark:text-blue-400">
+                        Existing before photo
+                      </a>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      After Photo *
+                    </label>
+                    <input
+                      type="file"
+                      name="afterImage"
+                      accept="image/*"
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    />
+                    {selectedIssue.afterImage && (
+                      <a href={selectedIssue.afterImage} target="_blank" rel="noreferrer" className="mt-1 inline-block text-sm text-blue-600 dark:text-blue-400">
+                        Existing after photo
+                      </a>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Receipt or Bill *
+                    </label>
+                    <input
+                      type="file"
+                      name="receiptUrl"
+                      accept="image/*,application/pdf"
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    />
+                    {selectedIssue.receiptUrl && (
+                      <a href={selectedIssue.receiptUrl} target="_blank" rel="noreferrer" className="mt-1 inline-block text-sm text-blue-600 dark:text-blue-400">
+                        Existing receipt or bill
+                      </a>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Receipt Note
+                    </label>
+                    <textarea
+                      name="receiptNote"
+                      defaultValue={selectedIssue.receiptNote || ''}
+                      rows="2"
+                      placeholder="Example: Paid municipal contractor for waste pickup and cleaning supplies."
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300 resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Progress Updates
+                    </label>
+                    <textarea
+                      name="progressUpdates"
+                      defaultValue={(selectedIssue.progressUpdates || []).map((update) => update.note).join('\n')}
+                      rows="4"
+                      placeholder="Add one update per line. Example: Contractor contacted; cleanup scheduled for Friday."
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300 resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Verification Status
+                    </label>
+                    <select
+                      name="verificationStatus"
+                      defaultValue={selectedIssue.verificationStatus || 'not_submitted'}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300"
+                    >
+                      <option value="not_submitted">Not submitted</option>
+                      <option value="pending_review">Pending admin/municipality review</option>
+                      <option value="admin_verified">Admin/municipality verified</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Verified By
+                    </label>
+                    <input
+                      name="verifiedBy"
+                      defaultValue={selectedIssue.verifiedBy || ''}
+                      placeholder="Admin or municipality officer name/reference"
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                      Refund / Reallocation Policy
+                    </label>
+                    <textarea
+                      name="refundPolicy"
+                      defaultValue={selectedIssue.refundPolicy || 'If this issue is not resolved, contributors may request a refund or choose reallocation to another verified community issue.'}
+                      rows="3"
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300 resize-none"
+                      required
+                    />
+                  </div>
                 </div>
                 
                 <div className="flex gap-3 pt-4">

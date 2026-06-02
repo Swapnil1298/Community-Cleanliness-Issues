@@ -63,13 +63,32 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
+    const existingIssue = await Issue.findById(req.params.id);
+    if (!existingIssue) {
+      return res.status(404).json({ message: 'Issue not found' });
+    }
+
+    const nextIssue = {
+      ...existingIssue.toObject(),
+      ...req.body,
+    };
+
+    if (nextIssue.status?.toLowerCase() === 'resolved') {
+      const hasResolutionProof = Boolean(nextIssue.afterImage && nextIssue.receiptUrl);
+      if (!hasResolutionProof) {
+        return res.status(400).json({
+          message:
+            'Resolution proof is required before marking an issue as resolved. Upload an after photo and receipt or bill first.',
+        });
+      }
+      req.body.resolvedAt = req.body.resolvedAt || new Date().toISOString();
+      req.body.verificationStatus = req.body.verificationStatus || 'pending_review';
+    }
+
     const issue = await Issue.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!issue) {
-      return res.status(404).json({ message: 'Issue not found' });
-    }
     res.json(toIssueResponse(issue));
   } catch (error) {
     res.status(400).json({ message: error.message });
