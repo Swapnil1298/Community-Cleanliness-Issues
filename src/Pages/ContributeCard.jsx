@@ -5,7 +5,7 @@ import { AuthContext } from '../Context/AuthContext';
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getIssueById, addContribution } from '../api/databaseService';
+import { createPaymentOrder, getIssueById, verifyPaymentAndSaveContribution } from '../api/databaseService';
 import Loading from './Loding';
 
 const ContributeCard = () => {
@@ -15,6 +15,7 @@ const ContributeCard = () => {
   const [showModal, setShowModal] = useState(false);
   const [issue, setIssue] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPaying, setIsPaying] = useState(false);
 
   useEffect(() => {
     const fetchIssue = async () => {
@@ -55,13 +56,30 @@ const ContributeCard = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const loadRazorpayCheckout = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsPaying(true);
 
+    const amount = Number(formData.amount);
     const contributionData = {
       issueId: id,
       issueTitle: issue.title,
-      amount: formData.amount,
+      amount,
       contributorName: formData.contributorName,
       email: formData.email,
       phone: formData.phone,
@@ -73,18 +91,85 @@ const ContributeCard = () => {
     };
 
     try {
-      await addContribution(contributionData);
-      toast.success('Contribution saved successfully!', {
-        position: 'top-right',
-        autoClose: 3000,
+      if (!amount || amount <= 0) {
+        toast.error('Please enter a valid amount', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+        setIsPaying(false);
+        return;
+      }
+
+      const isCheckoutLoaded = await loadRazorpayCheckout();
+      if (!isCheckoutLoaded) {
+        throw new Error('Unable to load Razorpay checkout');
+      }
+
+      const order = await createPaymentOrder({
+        amount,
+        issueId: id,
+        issueTitle: issue.title,
       });
-      setShowModal(false);
+
+      const checkout = new window.Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Community Cleanliness',
+        description: `Contribution for ${issue.title}`,
+        order_id: order.orderId,
+        prefill: {
+          name: formData.contributorName,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        notes: {
+          issueId: id,
+          issueTitle: issue.title,
+        },
+        theme: {
+          color: '#2563eb',
+        },
+        handler: async (response) => {
+          try {
+            await verifyPaymentAndSaveContribution({
+              ...response,
+              contribution: contributionData,
+            });
+            toast.success('Payment successful. Your contribution is recorded as paid.', {
+              position: 'top-right',
+              autoClose: 3000,
+            });
+            setShowModal(false);
+          } catch (error) {
+            console.error(error);
+            toast.error(error.message || 'Payment verification failed', {
+              position: 'top-right',
+              autoClose: 3000,
+            });
+          } finally {
+            setIsPaying(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setIsPaying(false);
+            toast.info('Payment cancelled', {
+              position: 'top-right',
+              autoClose: 2000,
+            });
+          },
+        },
+      });
+
+      checkout.open();
     } catch (error) {
       console.error(error);
-      toast.error('Failed to save contribution', {
+      toast.error(error.message || 'Failed to start payment', {
         position: 'top-right',
         autoClose: 3000,
       });
+      setIsPaying(false);
     }
   };
 
@@ -154,10 +239,10 @@ const ContributeCard = () => {
 
             <div className="mb-6 rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
               <h2 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
-                Transparency guarantee
+                Payment and transparency guarantee
               </h2>
               <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                Your contribution is recorded against this issue only. The issue cannot be marked resolved until an after photo and receipt or bill are uploaded.
+                Your real payment is processed through Razorpay and recorded against this issue only. The issue cannot be marked resolved until an after photo and receipt or bill are uploaded.
               </p>
             </div>
 
@@ -244,6 +329,7 @@ const ContributeCard = () => {
                   name="amount"
                   value={formData.amount}
                   onChange={handleChange}
+                  min="1"
                   className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
                   required
                 />
@@ -367,15 +453,16 @@ const ContributeCard = () => {
 
               <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-3">
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  The platform stores this issue-wise contribution record, refund preference, and fund status for transparency.
+                  After successful Razorpay payment, the platform stores this issue-wise paid contribution record, refund preference, and fund status for transparency.
                 </p>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1"
+                disabled={isPaying}
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
               >
-                Submit Contribution
+                {isPaying ? 'Opening Payment...' : 'Pay Now'}
               </button>
             </form>
           </div>

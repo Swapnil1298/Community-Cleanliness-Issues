@@ -366,7 +366,7 @@ const IssueDetails = () => {
                         <span className="font-semibold">Purpose:</span> {contributor.purpose || 'For resolving this specific issue only'}
                       </p>
                       <p className="text-gray-700 dark:text-gray-300">
-                        <span className="font-semibold">Fund status:</span> {contributor.fundStatus || 'recorded'}
+                        <span className="font-semibold">Fund status:</span> {contributor.fundStatus || 'payment_pending'}
                       </p>
                       <p className="text-gray-700 dark:text-gray-300">
                         <span className="font-semibold">Refund preference:</span> {contributor.refundPreference || 'contact_me'}

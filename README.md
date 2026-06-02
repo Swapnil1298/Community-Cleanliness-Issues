@@ -20,6 +20,7 @@ A full-stack web application that empowers communities to report damaged public 
 - **Frontend:** React, Vite, Tailwind CSS
 - **Backend:** Node.js, Express, MongoDB, JWT
 - **Database:** MongoDB (Atlas for production)
+- **Payments:** Razorpay Checkout with backend signature verification
 
 ---
 
@@ -44,6 +45,24 @@ A full-stack web application that empowers communities to report damaged public 
    mongodb+srv://myuser:mypassword@cluster0.xxxxx.mongodb.net/community-cleanliness?retryWrites=true&w=majority
    ```
 7. Put that string in `server/.env` locally, and in **Render environment variables** when deploying.
+
+---
+
+## Set up real payments with Razorpay
+
+The contribution form uses Razorpay Checkout for real INR payments. A contribution is saved only after the backend verifies Razorpay's payment signature.
+
+1. Create a Razorpay account at [razorpay.com](https://razorpay.com).
+2. Go to **Account & Settings** -> **API Keys**.
+3. Generate test keys for development or live keys for production.
+4. Add these backend environment variables:
+
+| Key | Value |
+|-----|--------|
+| `RAZORPAY_KEY_ID` | Razorpay key id, for example `rzp_test_...` |
+| `RAZORPAY_KEY_SECRET` | Razorpay key secret |
+
+Use test keys until you are ready to collect live money. Never expose `RAZORPAY_KEY_SECRET` in frontend env vars.
 
 ---
 
@@ -103,6 +122,8 @@ This project uses **two Web Services** on Render:
 |-----|--------|
 | `MONGODB_URI` | Your MongoDB Atlas URI |
 | `JWT_SECRET` | Long random secret |
+| `RAZORPAY_KEY_ID` | Razorpay key id |
+| `RAZORPAY_KEY_SECRET` | Razorpay key secret |
 | `FRONTEND_URL` | `https://community-cleanliness-web.onrender.com` |
 | `NODE_ENV` | `production` |
 

@@ -17,14 +17,22 @@ const contributionSchema = new mongoose.Schema(
     },
     fundStatus: {
       type: String,
-      enum: ['recorded', 'allocated', 'spent', 'refund_requested', 'refunded'],
-      default: 'recorded',
+      enum: ['payment_pending', 'paid', 'allocated', 'spent', 'refund_requested', 'refunded'],
+      default: 'payment_pending',
     },
     refundPreference: {
       type: String,
       enum: ['refund', 'reallocate', 'contact_me'],
       default: 'contact_me',
     },
+    paymentStatus: {
+      type: String,
+      enum: ['created', 'paid', 'failed'],
+      default: 'created',
+    },
+    paymentProvider: { type: String, default: 'razorpay' },
+    razorpayOrderId: { type: String, default: '' },
+    razorpayPaymentId: { type: String, default: '' },
   },
   { timestamps: true }
 );

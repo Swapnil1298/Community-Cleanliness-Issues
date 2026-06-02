@@ -87,6 +87,20 @@ export const addContribution = async (contributionData) => {
   });
 };
 
+export const createPaymentOrder = async (paymentData) => {
+  return request('/payments/orders', {
+    method: 'POST',
+    body: JSON.stringify(paymentData),
+  });
+};
+
+export const verifyPaymentAndSaveContribution = async (paymentData) => {
+  return request('/payments/verify', {
+    method: 'POST',
+    body: JSON.stringify(paymentData),
+  });
+};
+
 export const getMyContributions = async (email) => {
   return request(`/contributions/user/${encodeURIComponent(email)}`);
 };

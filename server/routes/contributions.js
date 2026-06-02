@@ -15,6 +15,12 @@ const toContributionResponse = (doc) => {
 
 router.post('/', async (req, res) => {
   try {
+    if (req.body.paymentStatus !== 'paid' || !req.body.razorpayPaymentId) {
+      return res.status(400).json({
+        message: 'Use the payment checkout to create a paid contribution.',
+      });
+    }
+
     const contribution = await Contribution.create(req.body);
     res.status(201).json(toContributionResponse(contribution));
   } catch (error) {
