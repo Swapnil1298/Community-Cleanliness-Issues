@@ -35,10 +35,10 @@ const Home = () => {
 
   // Statistics data
   const stats = [
-    { icon: <FiUsers size={40} />, number: '15,000+', label: 'Active Users' },
-    { icon: <MdRecycling size={40} />, number: '2,500+', label: 'Issues Resolved' },
-    { icon: <MdLocationCity size={40} />, number: '50+', label: 'Indian Cities Covered' },
-    { icon: <FiAward size={40} />, number: '98%', label: 'Success Rate' }
+    { icon: <FiUsers size={40} />, number: '72', label: 'Active Users' },
+    { icon: <MdRecycling size={40} />, number: '9', label: 'Issues Resolved' },
+    { icon: <MdLocationCity size={40} />, number: '4', label: 'Indian Cities Covered' },
+    { icon: <FiAward size={40} />, number: '82%', label: 'Success Rate' }
   ];
 
   // Features data
