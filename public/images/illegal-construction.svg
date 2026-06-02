@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#90EE90;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#skyGrad)"/>
+  
+  <!-- Green area (park) -->
+  <ellipse cx="300" cy="320" rx="200" ry="60" fill="#228B22"/>
+  
+  <!-- Trees -->
+  <circle cx="100" cy="280" r="20" fill="#2d5016"/>
+  <rect x="95" y="300" width="10" height="50" fill="#8B4513"/>
+  
+  <circle cx="500" cy="270" r="25" fill="#2d5016"/>
+  <rect x="493" y="295" width="14" height="50" fill="#8B4513"/>
+  
+  <!-- Illegal construction structure -->
+  <rect x="250" y="200" width="120" height="130" fill="#CC8844" stroke="#000" stroke-width="2"/>
+  <rect x="260" y="210" width="30" height="30" fill="#6699BB"/>
+  <rect x="300" y="210" width="30" height="30" fill="#6699BB"/>
+  <rect x="340" y="210" width="30" height="30" fill="#6699BB"/>
+  
+  <!-- Crane -->
+  <line x1="380" y1="150" x2="380" y2="200" stroke="#FFD700" stroke-width="3"/>
+  <line x1="380" y1="160" x2="420" y2="180" stroke="#FFD700" stroke-width="2"/>
+  <circle cx="420" cy="180" r="8" fill="#FF6600"/>
+  
+  <!-- Danger tape -->
+  <line x1="240" y1="195" x2="380" y2="195" stroke="#FF0000" stroke-width="3" stroke-dasharray="10,10"/>
+  
+  <!-- Warning sign -->
+  <rect x="450" y="150" width="70" height="90" fill="#FFD700" stroke="#FF0000" stroke-width="3"/>
+  <text x="485" y="205" font-size="48" font-weight="bold" fill="#FF0000" text-anchor="middle">!</text>
+  
+  <!-- No entry symbol -->
+  <circle cx="180" cy="240" r="30" fill="none" stroke="#FF0000" stroke-width="4"/>
+  <rect x="165" y="230" width="30" height="20" fill="#FF0000" transform="rotate(45 180 240)"/>
+  
+  <!-- Title -->
+  <text x="300" y="30" font-size="28" font-weight="bold" fill="#333" text-anchor="middle">Illegal Construction</text>
+</svg>

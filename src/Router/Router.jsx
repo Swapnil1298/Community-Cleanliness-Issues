@@ -1,0 +1,222 @@
+
+import { createBrowserRouter } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import Root from '../Root/Root';
+import PrivateRouter from './PriveteRouter';
+import PublicRoute from './PublicRouter';
+import Loading from '../Pages/Loding';
+import Dashbord from '../Pages/Dashbord/Dashbord';
+
+// Lazy load all pages
+const Home = lazy(() => import('../Pages/Home'));
+const About = lazy(() => import('../Pages/About'));
+const Profile = lazy(() => import('../Pages/Profile'));
+const SignUp = lazy(() => import('../Pages/SingUp'));
+const SignIn = lazy(() => import('../Pages/Singin'));
+const AddIssue = lazy(() => import('../Pages/AddIssue'));
+const MyContribution = lazy(() => import('../Pages/MyContribution'));
+const Welcome = lazy(() => import('../Pages/Dashbord/Welcome'));
+const Terms = lazy(() => import('../Pages/Terms'));
+const Privacy = lazy(() => import('../Pages/Privacyssss'));
+const Contact = lazy(() => import('../Pages/Contact'));
+const IssueDetails = lazy(() => import('../Pages/IssueDetails'));
+const ContributeCard = lazy(() => import('../Pages/ContributeCard'));
+const AllIssues = lazy(() => import('../Pages/AllIssuses'));
+const MyIssuesPage = lazy(() => import('../Pages/MyIssues'));
+const NotFound = lazy(() => import('../Pages/NotFound'));
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Home />
+          </Suspense>
+        ),
+        loader: () => fetch(`${import.meta.env.VITE_API_URL || '/api'}/latest-data`),
+      },
+      {
+        path: 'allissues',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AllIssues />
+          </Suspense>
+        ),
+        loader: () => fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue`),
+      },
+      {
+        path: 'about',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <About />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Profile />
+          </Suspense>
+        ),
+      },
+      {
+        element: <PublicRoute />,
+        children: [
+          {
+            path: 'signup',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <SignUp />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'signin',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <SignIn />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: 'terms',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Terms />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'privacy',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Privacy />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'contact',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Contact />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'issue/:id',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <IssueDetails />
+          </Suspense>
+        ),
+        loader: ({ params }) =>
+          fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
+      },
+      {
+        path: 'contributionss/:id',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ContributeCard />
+          </Suspense>
+        ),
+        loader: ({ params }) =>
+          fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
+      },
+      {
+        path: '*',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <NotFound />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+  // Dashboard routes with separate layout and private protection
+  {
+    element: <PrivateRouter />, // Protect all dashboard routes
+    children: [
+      {
+        path: 'dashbord',
+        element: <Dashbord />, // This is the dashboard layout
+        children: [
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<Loading />}>
+                <Welcome />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'addissues',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <AddIssue />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'myissues',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <MyIssuesPage />
+              </Suspense>
+            ),
+            loader: () =>
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/allmyissues`),
+          },
+          {
+            path: 'contribution',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <MyContribution />
+              </Suspense>
+            ),
+            loader: () =>
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/contrbutessssssssssss`),
+          },
+          {
+            path: 'issue/:id',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <IssueDetails />
+              </Suspense>
+            ),
+            loader: ({ params }) =>
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
+          },
+          {
+            path: 'allmyissues/:id',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <ContributeCard />
+              </Suspense>
+            ),
+            loader: ({ params }) =>
+              fetch(
+                `${import.meta.env.VITE_API_URL || '/api'}/allmyissues/${params.id}`
+              ),
+          },
+          {
+            path: 'contributionss/:id',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <ContributeCard />
+              </Suspense>
+            ),
+            loader: ({ params }) =>
+              fetch(`${import.meta.env.VITE_API_URL || '/api'}/issue/${params.id}`),
+          },
+        ],
+      },
+    ],
+  },
+]);
