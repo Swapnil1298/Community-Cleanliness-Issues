@@ -258,10 +258,9 @@ const MYIssues = () => {
                   </div>
                   <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                     <FiDollarSign size={14} className="text-red-600 dark:text-red-400" />
-                    <span className="font-semibold text-blue-600 dark:text-blue-400">${issue.amount}</span>
+                    <span className="font-semibold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
                   </div>
                   {issue.date && (
-                    <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                       <FiCalendar size={14} className="text-purple-600 dark:text-purple-400" />
                       <span>{new Date(issue.date).toLocaleDateString()}</span>
                     </div>
@@ -356,7 +355,7 @@ const MYIssues = () => {
                   </div>
                   <div>
                     <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Budget:</span>
-                    <p className="font-semibold text-blue-600 dark:text-blue-400">${selectedIssue.amount}</p>
+                    <p className="font-semibold text-blue-600 dark:text-blue-400">₹{selectedIssue.amount}</p>
                   </div>
                   <div>
                     <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Status:</span>

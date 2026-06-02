@@ -4,22 +4,44 @@ import toast, { Toaster } from 'react-hot-toast';
 import { AuthContext } from '../Context/AuthContext';
 import { FiSend, FiMapPin, FiDollarSign, FiImage, FiFileText, FiTag, FiUser } from 'react-icons/fi';
 import { Helmet } from 'react-helmet';
-import { addIssue } from '../api/databaseService';
+import { addIssue, uploadIssueImage } from '../api/databaseService';
+import ImageUpload from '../Componentes/ImageUpload';
 
 const AddIssue = () => {
   const { user } = useContext(AuthContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+
+  const handleImageSelect = (file) => {
+    setImageFile(file);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    let finalImageUrl = imageUrl;
+
+    // Upload image if a file is selected
+    if (imageFile) {
+      try {
+        const uploadResponse = await uploadIssueImage(imageFile);
+        finalImageUrl = uploadResponse.imageUrl || uploadResponse.filePath || '';
+      } catch (err) {
+        console.error('Image upload error:', err);
+        toast.error('Failed to upload image. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+    }
 
     const formData = {
       title: e.target.title.value.trim(),
       category: e.target.category.value,
       location: e.target.location.value.trim(),
       description: e.target.description.value.trim(),
-      image: e.target.image.value.trim(),
+      image: finalImageUrl,
       amount: parseFloat(e.target.amount.value),
       status: 'ongoing',
       date: new Date().toISOString(),
@@ -30,6 +52,8 @@ const AddIssue = () => {
       await addIssue(formData);
       toast.success('Issue added successfully!');
       e.target.reset();
+      setImageFile(null);
+      setImageUrl('');
     } catch (err) {
       console.error(err);
       toast.error('Failed to add issue. Please try again.');
@@ -129,17 +153,11 @@ const AddIssue = () => {
               ></textarea>
             </div>
 
-            {/* Image URL */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
-                <FiImage size={16} className="text-indigo-600 dark:text-indigo-400" />
-                Image URL (Optional)
-              </label>
-              <input
-                type="url"
-                name="image"
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300 transform focus:scale-105"
-                placeholder="https://example.com/image.jpg"
+            {/* Image URL or Upload */}
+            <div className="md:col-span-2">
+              <ImageUpload
+                onImageSelect={handleImageSelect}
+                label="Issue Image (Optional)"
               />
             </div>
 
@@ -147,7 +165,7 @@ const AddIssue = () => {
             <div>
               <label className="flex items-center gap-2 text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
                 <FiDollarSign size={16} className="text-yellow-600 dark:text-yellow-400" />
-                Suggested Fix Budget *
+                Suggested Fix Budget (INR) *
               </label>
               <input
                 type="number"
@@ -156,7 +174,7 @@ const AddIssue = () => {
                 min="0"
                 step="0.01"
                 className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300 transform focus:scale-105"
-                placeholder="Enter estimated cost in USD"
+                placeholder="Enter estimated cost in INR (₹)"
               />
             </div>
 

@@ -40,6 +40,10 @@ const AuthProvider = ({ children }) => {
     return Promise.resolve();
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
   useEffect(() => {
     const restoreSession = async () => {
       const token = getToken();
@@ -69,6 +73,7 @@ const AuthProvider = ({ children }) => {
     singinuser,
     googleSignIn,
     singout,
+    updateUser,
   };
 
   return (

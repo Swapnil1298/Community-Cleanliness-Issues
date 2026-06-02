@@ -21,7 +21,7 @@ const MYContributionCArd = ({ contribution }) => {
        'Contributor',
        'Email',
        'Phone',
-       'Amount',
+       'Amount (₹)',
        'Date',
      ];
      const tableRows = contributions.map((item) => [
@@ -29,7 +29,7 @@ const MYContributionCArd = ({ contribution }) => {
        item.contributorName || 'Anonymous',
        item.email || 'N/A',
        item.phone || 'N/A',
-       `$${item.amount || 0}`,
+       `₹${item.amount || 0}`,
        item.date || 'N/A',
      ]);
 
@@ -97,7 +97,7 @@ const MYContributionCArd = ({ contribution }) => {
               <div className="flex items-center justify-between">
                 <span className="text-[#FFD700] font-medium">Amount:</span>
                 <span className="text-lg font-semibold text-black">
-                  ${item.amount}
+                  ₹{item.amount}
                 </span>
               </div>
               <div className="text-xs text-black mt-1">

@@ -177,14 +177,14 @@ const MyContribution = () => {
       doc.setTextColor(100, 100, 100);
       doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 32);
       doc.text(`Total Contributions: ${myContributions.length}`, 14, 40);
-      doc.text(`Total Amount: $${totalAmount.toFixed(2)}`, 14, 48);
+      doc.text(`Total Amount: ₹${totalAmount.toFixed(2)}`, 14, 48);
 
       const tableColumn = [
         'Issue Title',
         'Contributor',
         'Email',
         'Phone',
-        'Amount ($)',
+        'Amount (₹)',
         'Date',
       ];
       
@@ -193,7 +193,7 @@ const MyContribution = () => {
         item.contributorName || 'Anonymous',
         item.email || 'N/A',
         item.phone || 'N/A',
-        `${parseFloat(item.amount || 0).toFixed(2)}`,
+        `₹${parseFloat(item.amount || 0).toFixed(2)}`,
         item.date ? new Date(item.date).toLocaleDateString() : 'N/A',
       ]);
 
@@ -328,7 +328,7 @@ const MyContribution = () => {
                 <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Average/Month</span>
               </div>
               <div className="text-lg font-bold text-blue-800 dark:text-blue-200">
-                ${chartData.monthly.amounts.length > 0 ? (totalAmount / chartData.monthly.amounts.length).toFixed(2) : '0.00'}
+                ₹{chartData.monthly.amounts.length > 0 ? (totalAmount / chartData.monthly.amounts.length).toFixed(2) : '0.00'}
               </div>
             </div>
             
@@ -338,7 +338,7 @@ const MyContribution = () => {
                 <span className="text-sm font-medium text-green-700 dark:text-green-300">Highest Month</span>
               </div>
               <div className="text-lg font-bold text-green-800 dark:text-green-200">
-                ${Math.max(...chartData.monthly.amounts, 0).toFixed(2)}
+                ₹{Math.max(...chartData.monthly.amounts, 0).toFixed(2)}
               </div>
             </div>
             
@@ -449,7 +449,7 @@ const MyContribution = () => {
                       labels: chartData.monthly.labels,
                       datasets: [
                         {
-                          label: 'Amount ($)',
+                          label: 'Amount (₹)',
                           data: chartData.monthly.amounts,
                           backgroundColor: 'rgba(59, 130, 246, 0.6)',
                           borderColor: 'rgba(59, 130, 246, 1)',
@@ -476,7 +476,7 @@ const MyContribution = () => {
                           bodyColor: 'white',
                           callbacks: {
                             label: function(context) {
-                              return `Amount: $${context.parsed.y.toFixed(2)}`;
+                              return `Amount: ₹${context.parsed.y.toFixed(2)}`;
                             }
                           }
                         }
@@ -571,7 +571,7 @@ const MyContribution = () => {
                             label: function(context) {
                               const total = context.dataset.data.reduce((a, b) => a + b, 0);
                               const percentage = ((context.parsed / total) * 100).toFixed(1);
-                              return `${context.label}: $${context.parsed.toFixed(2)} (${percentage}%)`;
+                              return `${context.label}: ₹${context.parsed.toFixed(2)} (${percentage}%)`;
                             }
                           }
                         }
@@ -595,7 +595,7 @@ const MyContribution = () => {
                       labels: chartData.monthly.labels,
                       datasets: [
                         {
-                          label: 'Cumulative Amount ($)',
+                          label: 'Cumulative Amount (₹)',
                           data: chartData.monthly.cumulative,
                           borderColor: 'rgba(168, 85, 247, 1)',
                           backgroundColor: 'rgba(168, 85, 247, 0.1)',
@@ -627,7 +627,7 @@ const MyContribution = () => {
                           bodyColor: 'white',
                           callbacks: {
                             label: function(context) {
-                              return `Total: $${context.parsed.y.toFixed(2)}`;
+                              return `Total: ₹${context.parsed.y.toFixed(2)}`;
                             }
                           }
                         }
@@ -673,7 +673,7 @@ const MyContribution = () => {
                   </h3>
                 </div>
                 <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Total: ${totalAmount.toFixed(2)}
+                  Total: ₹${totalAmount.toFixed(2)}
                 </div>
               </div>
               <div className="h-96">
@@ -682,7 +682,7 @@ const MyContribution = () => {
                     labels: chartData.monthly.labels,
                     datasets: [
                       {
-                        label: 'Amount ($)',
+                        label: 'Amount (₹)',
                         data: chartData.monthly.amounts,
                         backgroundColor: 'rgba(59, 130, 246, 0.6)',
                         borderColor: 'rgba(59, 130, 246, 1)',
@@ -724,7 +724,7 @@ const MyContribution = () => {
                         callbacks: {
                           label: function(context) {
                             if (context.datasetIndex === 0) {
-                              return `Amount: $${context.parsed.y.toFixed(2)}`;
+                              return `Amount: ₹${context.parsed.y.toFixed(2)}`;
                             } else {
                               return `Contributions: ${context.parsed.y}`;
                             }
@@ -741,7 +741,7 @@ const MyContribution = () => {
                         ticks: {
                           color: 'var(--text-secondary)',
                           callback: function(value) {
-                            return '$' + value.toFixed(0);
+                            return '₹' + value.toFixed(0);
                           }
                         },
                         grid: {
@@ -846,7 +846,7 @@ const MyContribution = () => {
                           label: function(context) {
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
                             const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            return `${context.label}: $${context.parsed.toFixed(2)} (${percentage}%)`;
+                            return `${context.label}: ₹${context.parsed.toFixed(2)} (${percentage}%)`;
                           }
                         }
                       }
@@ -880,7 +880,7 @@ const MyContribution = () => {
                     labels: chartData.monthly.labels,
                     datasets: [
                       {
-                        label: 'Cumulative Amount ($)',
+                        label: 'Cumulative Amount (₹)',
                         data: chartData.monthly.cumulative,
                         borderColor: 'rgba(168, 85, 247, 1)',
                         backgroundColor: 'rgba(168, 85, 247, 0.1)',
@@ -894,7 +894,7 @@ const MyContribution = () => {
                         pointHoverRadius: 10
                       },
                       {
-                        label: 'Monthly Amount ($)',
+                        label: 'Monthly Amount (₹)',
                         data: chartData.monthly.amounts,
                         borderColor: 'rgba(59, 130, 246, 1)',
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -931,9 +931,9 @@ const MyContribution = () => {
                         callbacks: {
                           label: function(context) {
                             if (context.datasetIndex === 0) {
-                              return `Cumulative: $${context.parsed.y.toFixed(2)}`;
+                              return `Cumulative: ₹${context.parsed.y.toFixed(2)}`;
                             } else {
-                              return `Monthly: $${context.parsed.y.toFixed(2)}`;
+                              return `Monthly: ₹${context.parsed.y.toFixed(2)}`;
                             }
                           }
                         }
@@ -945,7 +945,7 @@ const MyContribution = () => {
                         ticks: {
                           color: 'var(--text-secondary)',
                           callback: function(value) {
-                            return '$' + value.toFixed(0);
+                            return '₹' + value.toFixed(0);
                           }
                         },
                         grid: {

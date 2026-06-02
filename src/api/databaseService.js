@@ -1,5 +1,35 @@
 import { request } from './apiClient';
 
+// Upload issue image
+export const uploadIssueImage = async (file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  const API_BASE = import.meta.env.VITE_API_URL || '/api';
+  return fetch(`${API_BASE}/upload/issue`, {
+    method: 'POST',
+    body: formData,
+  }).then(res => {
+    if (!res.ok) throw new Error('Upload failed');
+    return res.json();
+  });
+};
+
+// Upload profile image
+export const uploadProfileImage = async (file) => {
+  const formData = new FormData();
+  formData.append('profileImage', file);
+  
+  const API_BASE = import.meta.env.VITE_API_URL || '/api';
+  return fetch(`${API_BASE}/upload/profile`, {
+    method: 'POST',
+    body: formData,
+  }).then(res => {
+    if (!res.ok) throw new Error('Upload failed');
+    return res.json();
+  });
+};
+
 export const addIssue = async (formData) => {
   return request('/issues', {
     method: 'POST',

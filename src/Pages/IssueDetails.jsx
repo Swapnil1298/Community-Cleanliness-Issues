@@ -213,7 +213,7 @@ const IssueDetails = () => {
               <DollarSign className="text-red-500" size={18} />
               <span className="text-[18px]">
                 <strong className="text-red-600 dark:text-red-400">Suggested Budget:</strong>{' '}
-                <span className="text-xl font-bold text-blue-600 dark:text-blue-400">${issue.amount}</span>
+                <span className="text-xl font-bold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
               </span>
             </div>
           </div>
@@ -256,7 +256,7 @@ const IssueDetails = () => {
                         </p>
                       </div>
                       <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        ${contributor.amount}
+                        ₹{contributor.amount}
                       </span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">

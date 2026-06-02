@@ -140,7 +140,7 @@ const ContributeCard = () => {
               <span className="flex items-center gap-1">
                 <DollarSign size={16} className="text-red-600 dark:text-red-400" /> 
                 <span className="font-medium text-red-600 dark:text-red-400">Amount:</span> 
-                <span className="text-lg font-bold text-blue-600 dark:text-blue-400">${issue.amount}</span>
+                <span className="text-lg font-bold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
               </span>
             </div>
 

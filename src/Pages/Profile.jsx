@@ -1,20 +1,57 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { Helmet } from 'react-helmet';
 import { FiUser, FiMail, FiCalendar, FiEdit3, FiCamera, FiSave, FiX, FiShield, FiMapPin, FiPhone, FiSettings, FiAward } from 'react-icons/fi';
 import { MdVerified, MdDashboard } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import { uploadProfileImage } from '../api/databaseService';
+import { updateProfile } from '../api/authService';
+import ImageUpload from '../Componentes/ImageUpload';
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [openCameraPicker, setOpenCameraPicker] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [editedInfo, setEditedInfo] = useState({
     displayName: user?.displayName || '',
     phone: user?.phoneNumber || '',
     location: ''
   });
+
+  useEffect(() => {
+    if (!showImageUpload) {
+      setOpenCameraPicker(false);
+    }
+  }, [showImageUpload, setOpenCameraPicker]);
+
+  const handleImageSelect = async (file) => {
+    if (!file) return;
+    
+    setIsUploadingImage(true);
+    try {
+      const uploadResponse = await uploadProfileImage(file);
+      const imageUrl = uploadResponse.imageUrl || uploadResponse.filePath;
+      if (!imageUrl) {
+        throw new Error('Upload did not return an image URL');
+      }
+
+      const updatedUser = await updateProfile({ photoURL: imageUrl });
+      updateUser(updatedUser);
+      toast.success('Profile picture updated successfully!');
+      setShowImageUpload(false);
+      setOpenCameraPicker(false);
+    } catch (err) {
+      console.error('Upload error:', err);
+      toast.error('Failed to upload profile picture');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   const handleSave = () => {
     setIsEditing(false);
@@ -103,7 +140,15 @@ const Profile = () => {
                       <FiUser size={48} className="text-white" />
                     </div>
                   )}
-                  <button className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors shadow-lg">
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      setShowImageUpload(true);
+                      setOpenCameraPicker(true);
+                    }}
+                    disabled={isUploadingImage}
+                    className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     <FiCamera size={16} />
                   </button>
                 </div>
@@ -190,6 +235,45 @@ const Profile = () => {
               </div>
             </motion.div>
           </motion.div>
+
+          {/* Image Upload Modal */}
+          {showImageUpload && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold" style={{ color: 'var(--text-color)' }}>
+                    Update Profile Picture
+                  </h3>
+                  <button
+                    onClick={() => setShowImageUpload(false)}
+                    disabled={isUploadingImage}
+                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-50"
+                  >
+                    <FiX size={24} />
+                  </button>
+                </div>
+
+                <ImageUpload
+                  onImageSelect={handleImageSelect}
+                  label="Select New Profile Picture"
+                  openCameraOnMount={openCameraPicker}
+                />
+
+                <button
+                  onClick={() => setShowImageUpload(false)}
+                  disabled={isUploadingImage}
+                  className="mt-6 w-full px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Close
+                </button>
+              </motion.div>
+            </div>
+          )}
 
           {/* Right Column - Details */}
           <motion.div
