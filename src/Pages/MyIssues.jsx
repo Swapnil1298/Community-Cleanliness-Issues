@@ -261,6 +261,7 @@ const MYIssues = () => {
                     <span className="font-semibold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
                   </div>
                   {issue.date && (
+                    <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                       <FiCalendar size={14} className="text-purple-600 dark:text-purple-400" />
                       <span>{new Date(issue.date).toLocaleDateString()}</span>
                     </div>
