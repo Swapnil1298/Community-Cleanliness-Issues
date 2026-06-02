@@ -4,17 +4,25 @@ import { FiArrowRight } from 'react-icons/fi';
 
 const categoryImages = {
   Cleanliness:
-    'https://images.unsplash.com/photo-1605600659873-d808a13e4d2a?auto=format&fit=crop&w=900&q=80',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Wastedel.jpg',
+  'Garbage & Waste Management':
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Wastedel.jpg',
   'Garbage Management':
-    'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=900&q=80',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Street%20Bench%2C%20New%20Delhi.jpg',
+  'Broken Public Property':
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Street%20Bench%2C%20New%20Delhi.jpg',
   'Public Space':
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Namma%20Metro%20construction%20site%20in%20July%202010.jpg',
+  'Illegal Construction':
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Namma%20Metro%20construction%20site%20in%20July%202010.jpg',
   'Road Damager':
-    'https://images.unsplash.com/photo-1515165562835-c3b8c37b0f7d?auto=format&fit=crop&w=900&q=80',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Potholed%20road%20outside%20Kolkata%20Airport.jpg',
+  'Road Damage & Infrastructure':
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Potholed%20road%20outside%20Kolkata%20Airport.jpg',
 };
 
 const defaultIssueImage =
-  'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=80';
+  'https://commons.wikimedia.org/wiki/Special:FilePath/Garbage%20on%20a%20roadside.JPG';
 
 const getIssueImage = (issue) => {
   return issue.image || categoryImages[issue.category] || defaultIssueImage;
