@@ -17,6 +17,8 @@ const categoryImages = {
     'https://commons.wikimedia.org/wiki/Special:FilePath/Namma%20Metro%20construction%20site%20in%20July%202010.jpg',
   'Road Damager':
     'https://commons.wikimedia.org/wiki/Special:FilePath/Potholed%20road%20outside%20Kolkata%20Airport.jpg',
+  'Road Damage':
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Potholed%20road%20outside%20Kolkata%20Airport.jpg',
   'Road Damage & Infrastructure':
     'https://commons.wikimedia.org/wiki/Special:FilePath/Potholed%20road%20outside%20Kolkata%20Airport.jpg',
 };
@@ -25,6 +27,16 @@ const defaultIssueImage =
   'https://commons.wikimedia.org/wiki/Special:FilePath/Garbage%20on%20a%20roadside.JPG';
 
 const getIssueImage = (issue) => {
+  const category = issue.category || '';
+  const title = issue.title || '';
+  const image = issue.image || '';
+  const isRoadDamageIssue = /road|pothole/i.test(`${category} ${title}`);
+  const isWasteImage = /waste|garbage/i.test(image);
+
+  if (isRoadDamageIssue && (!image || isWasteImage)) {
+    return categoryImages['Road Damage'];
+  }
+
   return issue.image || categoryImages[issue.category] || defaultIssueImage;
 };
 
