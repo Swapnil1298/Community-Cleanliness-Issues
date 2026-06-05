@@ -18,6 +18,8 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: SEED_SAMPLE_ISSUES
+        value: false
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: RAZORPAY_KEY_ID

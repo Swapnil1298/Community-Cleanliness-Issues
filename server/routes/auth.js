@@ -6,6 +6,7 @@ import { generateToken } from '../utils/jwt.js';
 import { toAuthUser } from '../utils/formatUser.js';
 import { protect } from '../middleware/auth.js';
 import { profileImageUpload } from '../middleware/upload.js';
+import { saveUploadedFile } from '../utils/fileStorage.js';
 
 const router = Router();
 
@@ -41,7 +42,8 @@ router.post('/register', (req, res, next) => {
       return res.status(409).json({ message: 'An account with this email already exists' });
     }
 
-    const photoURL = `/uploads/profiles/${req.file.filename}`;
+    const storedProfileImage = await saveUploadedFile(req.file, 'profiles');
+    const photoURL = storedProfileImage.url;
 
     const user = await User.create({
       email: email.toLowerCase(),

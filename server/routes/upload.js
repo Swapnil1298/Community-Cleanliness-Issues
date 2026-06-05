@@ -1,33 +1,12 @@
 import { Router } from 'express';
 import { profileImageUpload } from '../middleware/upload.js';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
+import multer from 'multer';
+import { saveUploadedFile } from '../utils/fileStorage.js';
 
 const router = Router();
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Create issues upload directory if it doesn't exist
-const issuesUploadDir = path.join(__dirname, '..', 'uploads', 'issues');
-const resolutionUploadDir = path.join(__dirname, '..', 'uploads', 'resolution');
-fs.mkdirSync(issuesUploadDir, { recursive: true });
-fs.mkdirSync(resolutionUploadDir, { recursive: true });
-
-// Configure multer for issue images
-import multer from 'multer';
-
-const issueImageStorage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, issuesUploadDir);
-  },
-  filename: (_req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${unique}${path.extname(file.originalname).toLowerCase()}`);
-  },
-});
 
 const issueImageUpload = multer({
-  storage: issueImageStorage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -38,18 +17,8 @@ const issueImageUpload = multer({
   },
 });
 
-const resolutionFileStorage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, resolutionUploadDir);
-  },
-  filename: (_req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${unique}${path.extname(file.originalname).toLowerCase()}`);
-  },
-});
-
 const resolutionFileUpload = multer({
-  storage: resolutionFileStorage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
@@ -60,19 +29,29 @@ const resolutionFileUpload = multer({
   },
 });
 
+const runSingleUpload = (upload, fieldName) => (req, res, next) => {
+  upload.single(fieldName)(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({ message: error.message || 'Upload failed' });
+    }
+    next();
+  });
+};
+
 // Upload issue image
-router.post('/issue', issueImageUpload.single('image'), (req, res) => {
+router.post('/issue', runSingleUpload(issueImageUpload, 'image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const imageUrl = `/uploads/issues/${req.file.filename}`;
+    const storedFile = await saveUploadedFile(req.file, 'issues');
+    const imageUrl = storedFile.url;
     res.json({
       success: true,
       imageUrl,
       filePath: imageUrl,
-      filename: req.file.filename,
+      filename: storedFile.filename,
     });
   } catch (error) {
     console.error('Upload error:', error);
@@ -81,19 +60,20 @@ router.post('/issue', issueImageUpload.single('image'), (req, res) => {
 });
 
 // Upload resolution proof, before/after photos, and receipts
-router.post('/resolution', resolutionFileUpload.single('file'), (req, res) => {
+router.post('/resolution', runSingleUpload(resolutionFileUpload, 'file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const fileUrl = `/uploads/resolution/${req.file.filename}`;
+    const storedFile = await saveUploadedFile(req.file, 'resolution');
+    const fileUrl = storedFile.url;
     res.json({
       success: true,
       fileUrl,
       imageUrl: fileUrl,
       filePath: fileUrl,
-      filename: req.file.filename,
+      filename: storedFile.filename,
     });
   } catch (error) {
     console.error('Resolution upload error:', error);
@@ -102,18 +82,19 @@ router.post('/resolution', resolutionFileUpload.single('file'), (req, res) => {
 });
 
 // Upload profile image
-router.post('/profile', profileImageUpload.single('profileImage'), (req, res) => {
+router.post('/profile', runSingleUpload(profileImageUpload, 'profileImage'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const imageUrl = `/uploads/profiles/${req.file.filename}`;
+    const storedFile = await saveUploadedFile(req.file, 'profiles');
+    const imageUrl = storedFile.url;
     res.json({
       success: true,
       imageUrl,
       filePath: imageUrl,
-      filename: req.file.filename,
+      filename: storedFile.filename,
     });
   } catch (error) {
     console.error('Upload error:', error);

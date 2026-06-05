@@ -71,20 +71,22 @@ const sampleIssues = [
 
 export const seedSampleIssues = async () => {
   try {
-    const existingCount = await Issue.countDocuments();
-    
-    // Only add sample issues if database is empty or has very few issues
-    if (existingCount < 6) {
-      console.log('Seeding sample issues...');
-      
-      // Clear existing issues if less than 6
-      if (existingCount > 0) {
-        await Issue.deleteMany({});
+    console.log('Checking sample issues...');
+
+    let insertedCount = 0;
+    for (const sampleIssue of sampleIssues) {
+      const result = await Issue.updateOne(
+        { title: sampleIssue.title, email: sampleIssue.email },
+        { $setOnInsert: sampleIssue },
+        { upsert: true }
+      );
+
+      if (result.upsertedCount) {
+        insertedCount += 1;
       }
-      
-      await Issue.insertMany(sampleIssues);
-      console.log('Sample issues seeded successfully!');
     }
+
+    console.log(`Sample issue seed complete. Inserted ${insertedCount} new records.`);
   } catch (error) {
     console.error('Error seeding sample issues:', error.message);
   }

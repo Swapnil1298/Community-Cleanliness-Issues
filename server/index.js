@@ -10,6 +10,7 @@ import authRouter from './routes/auth.js';
 import uploadRouter from './routes/upload.js';
 import paymentsRouter from './routes/payments.js';
 import { seedSampleIssues } from './seeds/sampleIssues.js';
+import { streamUploadedFile } from './utils/fileStorage.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -17,11 +18,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(corsMiddleware);
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
+
+app.get('/uploads/:folder/:filename', streamUploadedFile);
 
 app.use('/api/auth', authRouter);
 app.use('/api/issues', issuesRouter);
@@ -41,8 +43,9 @@ if (process.env.NODE_ENV === 'production') {
 
 connectDB()
   .then(async () => {
-    // Seed sample issues if needed
-    await seedSampleIssues();
+    if (process.env.SEED_SAMPLE_ISSUES === 'true') {
+      await seedSampleIssues();
+    }
     
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
