@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Calendar, Tag, MapPin, DollarSign, ArrowLeft } from 'lucide-react';
+import { X, Calendar, Tag, MapPin, IndianRupee, ArrowLeft } from 'lucide-react';
 import { AuthContext } from '../Context/AuthContext';
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
@@ -227,7 +227,7 @@ const ContributeCard = () => {
                 <span className="font-medium text-blue-600 dark:text-blue-400">Date:</span> {issue.date}
               </span>
               <span className="flex items-center gap-1">
-                <DollarSign size={16} className="text-red-600 dark:text-red-400" /> 
+                <IndianRupee size={16} className="text-red-600 dark:text-red-400" /> 
                 <span className="font-medium text-red-600 dark:text-red-400">Amount:</span> 
                 <span className="text-lg font-bold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
               </span>

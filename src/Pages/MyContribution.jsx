@@ -2,7 +2,8 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { Helmet } from 'react-helmet';
-import { FiDownload, FiFileText, FiCalendar, FiDollarSign, FiUser, FiMail, FiPhone, FiSearch, FiBarChart2, FiPieChart, FiTrendingUp } from 'react-icons/fi';
+import { FiDownload, FiFileText, FiCalendar, FiUser, FiMail, FiPhone, FiSearch, FiBarChart2, FiPieChart, FiTrendingUp } from 'react-icons/fi';
+import { TbCurrencyRupee } from 'react-icons/tb';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
@@ -148,21 +149,10 @@ const MyContribution = () => {
     };
   }, [myContributions]);
 
-  const formatBudget = (amount) => {
-    const millions = Math.floor(amount / 1000000);
-    const thousands = Math.floor((amount % 1000000) / 1000);
-    const dollars = Math.floor(amount % 1000);
-    const cents = Math.floor((amount % 1) * 100);
-    
-    let result = [];
-    
-    if (millions > 0) result.push(`${millions}M`);
-    if (thousands > 0) result.push(`${thousands}K`);
-    if (dollars > 0) result.push(`${dollars}D`);
-    if (cents > 0) result.push(`${cents}S`);
-    
-    return result.length > 0 ? result.join(' ') : '0D';
-  };
+  const formatBudget = (amount) =>
+    `\u20B9${Number(amount || 0).toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+    })}`;
 
   const handleDownloadPDF = () => {
     try {
@@ -249,6 +239,14 @@ const MyContribution = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-600">
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
       <Helmet>
@@ -288,7 +286,7 @@ const MyContribution = () => {
         <div className="rounded-xl p-4 sm:p-6 border-2 border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
           <div className="flex items-center gap-3">
             <div className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-              <FiDollarSign size={20} className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6" />
+              <TbCurrencyRupee size={20} className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6" />
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-color)' }}>
@@ -334,7 +332,7 @@ const MyContribution = () => {
             
             <div className="rounded-lg p-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 border border-green-200 dark:border-green-700">
               <div className="flex items-center gap-2 mb-2">
-                <FiDollarSign className="text-green-600 dark:text-green-400" size={16} />
+                <TbCurrencyRupee className="text-green-600 dark:text-green-400" size={16} />
                 <span className="text-sm font-medium text-green-700 dark:text-green-300">Highest Month</span>
               </div>
               <div className="text-lg font-bold text-green-800 dark:text-green-200">
@@ -487,7 +485,7 @@ const MyContribution = () => {
                           ticks: {
                             color: 'var(--text-secondary)',
                             callback: function(value) {
-                              return '$' + value.toFixed(0);
+                            return '\u20B9' + value.toFixed(0);
                             }
                           },
                           grid: {
@@ -638,7 +636,7 @@ const MyContribution = () => {
                           ticks: {
                             color: 'var(--text-secondary)',
                             callback: function(value) {
-                              return '$' + value.toFixed(0);
+                            return '\u20B9' + value.toFixed(0);
                             }
                           },
                           grid: {
@@ -1083,9 +1081,9 @@ const MyContribution = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <FiDollarSign className="text-green-600 dark:text-green-400 flex-shrink-0" size={16} />
+                        <TbCurrencyRupee className="text-green-600 dark:text-green-400 flex-shrink-0" size={16} />
                         <span className="font-semibold text-green-600 dark:text-green-400">
-                          ${parseFloat(item.amount || 0).toFixed(2)}
+                          {`\u20B9${parseFloat(item.amount || 0).toFixed(2)}`}
                         </span>
                       </div>
                     </td>
@@ -1149,9 +1147,9 @@ const MyContribution = () => {
                   {/* Amount and Date */}
                   <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2">
-                      <FiDollarSign className="text-green-600 dark:text-green-400 flex-shrink-0" size={14} />
+                      <TbCurrencyRupee className="text-green-600 dark:text-green-400 flex-shrink-0" size={14} />
                       <span className="font-semibold text-green-600 dark:text-green-400 text-sm">
-                        ${parseFloat(item.amount || 0).toFixed(2)}
+                        {`\u20B9${parseFloat(item.amount || 0).toFixed(2)}`}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">

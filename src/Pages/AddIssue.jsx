@@ -2,7 +2,8 @@
 import React, { useContext, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { AuthContext } from '../Context/AuthContext';
-import { FiSend, FiMapPin, FiDollarSign, FiImage, FiFileText, FiTag, FiUser } from 'react-icons/fi';
+import { FiSend, FiMapPin, FiFileText, FiTag, FiUser } from 'react-icons/fi';
+import { TbCurrencyRupee } from 'react-icons/tb';
 import { Helmet } from 'react-helmet';
 import { addIssue, uploadIssueImage } from '../api/databaseService';
 import ImageUpload from '../Componentes/ImageUpload';
@@ -164,7 +165,7 @@ const AddIssue = () => {
             {/* Suggested Budget */}
             <div>
               <label className="flex items-center gap-2 text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
-                <FiDollarSign size={16} className="text-yellow-600 dark:text-yellow-400" />
+                <TbCurrencyRupee size={16} className="text-yellow-600 dark:text-yellow-400" />
                 Suggested Fix Budget (INR) *
               </label>
               <input

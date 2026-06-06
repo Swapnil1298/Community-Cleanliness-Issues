@@ -1,7 +1,8 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../Context/AuthContext';
-import { FiEdit, FiTrash2, FiEye, FiCalendar, FiMapPin, FiDollarSign, FiTag, FiClock, FiX } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiEye, FiCalendar, FiMapPin, FiTag, FiClock, FiX } from 'react-icons/fi';
+import { TbCurrencyRupee } from 'react-icons/tb';
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -159,21 +160,18 @@ const MYIssues = () => {
     }
   };
 
-  const formatBudget = (amount) => {
-    const millions = Math.floor(amount / 1000000);
-    const thousands = Math.floor((amount % 1000000) / 1000);
-    const dollars = Math.floor(amount % 1000);
-    const cents = Math.floor((amount % 1) * 100);
-    
-    let result = [];
-    
-    if (millions > 0) result.push(`${millions}M`);
-    if (thousands > 0) result.push(`${thousands}K`);
-    if (dollars > 0) result.push(`${dollars}D`);
-    if (cents > 0) result.push(`${cents}S`);
-    
-    return result.length > 0 ? result.join(' ') : '0D';
-  };
+  const formatBudget = (amount) =>
+    `\u20B9${Number(amount || 0).toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+    })}`;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-600">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -230,7 +228,7 @@ const MYIssues = () => {
         <div className="rounded-xl p-6 border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
           <div className="flex items-center gap-3">
             <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
-              <FiDollarSign size={24} className="text-purple-600 dark:text-purple-400" />
+              <TbCurrencyRupee size={24} className="text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <h3 className="text-2xl font-bold" style={{ color: 'var(--text-color)' }}>
@@ -285,7 +283,7 @@ const MYIssues = () => {
                     <span>{issue.location}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                    <FiDollarSign size={14} className="text-red-600 dark:text-red-400" />
+                    <TbCurrencyRupee size={14} className="text-red-600 dark:text-red-400" />
                     <span className="font-semibold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
                   </div>
                   {issue.date && (

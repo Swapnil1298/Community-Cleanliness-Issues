@@ -1,6 +1,6 @@
 // import React from 'react';
 // import { NavLink, useLoaderData } from 'react-router-dom';
-// import { Calendar, MapPin, Tag, DollarSign } from 'lucide-react';
+// import { Calendar, MapPin, Tag, IndianRupee } from 'lucide-react';
 // import { Helmet } from 'react-helmet';
 // import { toast, ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
@@ -65,9 +65,9 @@
 //             </div>
 
 //             <div className="flex items-center gap-2 text-sm">
-//               <DollarSign className="text-red-500" size={18} />
+//               <IndianRupee className="text-red-500" size={18} />
 //               <span>
-//                 <strong className="text-[#FFD700]">Suggested Budget:</strong> $
+//                 <strong className="text-[#FFD700]">Suggested Budget:</strong> ₹
 //                 {issue.amount}
 //               </span>
 //             </div>
@@ -108,7 +108,7 @@
 // export default IssueDetails;
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Tag, DollarSign, ArrowLeft, Users } from 'lucide-react'; 
+import { Calendar, MapPin, Tag, IndianRupee, ArrowLeft, Users } from 'lucide-react'; 
 import { Helmet } from 'react-helmet';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -217,7 +217,7 @@ const IssueDetails = () => {
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              <DollarSign className="text-red-500" size={18} />
+              <IndianRupee className="text-red-500" size={18} />
               <span className="text-[18px]">
                 <strong className="text-red-600 dark:text-red-400">Suggested Budget:</strong>{' '}
                 <span className="text-xl font-bold text-blue-600 dark:text-blue-400">₹{issue.amount}</span>
@@ -245,7 +245,7 @@ const IssueDetails = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Issue-wise contributions</p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">Rs. {totalContributed}</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{`\u20B9${totalContributed}`}</p>
               </div>
               <div className="rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4">
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Resolution proof</p>
