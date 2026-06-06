@@ -6,9 +6,10 @@ import { GoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../Context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
+import { MAX_UPLOAD_IMAGE_SIZE, prepareImageForUpload } from '../utils/imageUpload';
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const formatFileSize = (bytes) => `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -34,11 +35,14 @@ const SignUp = () => {
     };
   }, [imagePreview]);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
 
     if (!file) {
       setProfileImage(null);
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
       setImagePreview('');
       return;
     }
@@ -49,18 +53,33 @@ const SignUp = () => {
       return;
     }
 
-    if (file.size > MAX_IMAGE_SIZE) {
-      toast.error('Image must be smaller than 5 MB.');
+    setError('');
+
+    try {
+      const preparedImage = await prepareImageForUpload(file);
+
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+
+      setProfileImage(preparedImage);
+      setImagePreview(URL.createObjectURL(preparedImage));
+
+      if (preparedImage.size < file.size) {
+        toast.success(
+          `Image optimized for upload (${formatFileSize(preparedImage.size)}).`
+        );
+      }
+    } catch (err) {
+      setProfileImage(null);
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+      setImagePreview('');
+      toast.error(err.message || 'Unable to prepare image for upload.');
+    } finally {
       e.target.value = '';
-      return;
     }
-
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-
-    setProfileImage(file);
-    setImagePreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = (e) => {
@@ -173,7 +192,8 @@ const SignUp = () => {
               className="w-full px-4 py-3 bg-white text-[#2E8B57] border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#2E8B57] file:text-white file:cursor-pointer"
             />
             <p className="text-[#FFDAB9] text-xs mt-2">
-              Upload JPG, PNG, or GIF (max 5 MB)
+              Upload JPG, PNG, GIF, or WebP. Large photos are resized to max{' '}
+              {formatFileSize(MAX_UPLOAD_IMAGE_SIZE)}.
             </p>
             {imagePreview && (
               <div className="mt-4 flex flex-col items-center">
