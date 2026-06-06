@@ -158,9 +158,12 @@ const SignIn = () => {
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => toast.error('Google sign in failed', { duration: 2000 })}
+                useOneTap
+                auto_select
+                context="signin"
                 theme="outline"
                 size="large"
-                text="continue_with"
+                text="signin_with"
                 shape="rectangular"
               />
             </div>
