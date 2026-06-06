@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { GoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../Context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
-import { MAX_UPLOAD_IMAGE_SIZE, prepareImageForUpload } from '../utils/imageUpload';
-
-const formatFileSize = (bytes) => `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -16,69 +13,12 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [passcode, setPasscode] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [profileImage, setProfileImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState('');
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleToggle = () => setShow(!show);
-
-  useEffect(() => {
-    return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
-  }, [imagePreview]);
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files?.[0];
-
-    if (!file) {
-      setProfileImage(null);
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-      setImagePreview('');
-      return;
-    }
-
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select a valid image file.');
-      e.target.value = '';
-      return;
-    }
-
-    setError('');
-
-    try {
-      const preparedImage = await prepareImageForUpload(file);
-
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-
-      setProfileImage(preparedImage);
-      setImagePreview(URL.createObjectURL(preparedImage));
-
-      if (preparedImage.size < file.size) {
-        toast.success(
-          `Image optimized for upload (${formatFileSize(preparedImage.size)}).`
-        );
-      }
-    } catch (err) {
-      setProfileImage(null);
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-      setImagePreview('');
-      toast.error(err.message || 'Unable to prepare image for upload.');
-    } finally {
-      e.target.value = '';
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,10 +32,6 @@ const SignUp = () => {
 
     if (!terms) {
       toast.error('Please accept our terms and conditions.');
-      return;
-    }
-    if (!profileImage) {
-      toast.error('Please upload a profile image.');
       return;
     }
     if (passwordValue.length < 6) {
@@ -119,17 +55,12 @@ const SignUp = () => {
 
     setIsSubmitting(true);
 
-    createUser(emailValue, passwordValue, firstNameValue, profileImage)
+    createUser(emailValue, passwordValue, firstNameValue)
       .then(() => {
         e.target.reset();
         setEmail('');
         setPasscode('');
         setFirstName('');
-        setProfileImage(null);
-        if (imagePreview) {
-          URL.revokeObjectURL(imagePreview);
-        }
-        setImagePreview('');
         setSuccess(true);
         toast.success('Registration successful!');
         navigate('/');
@@ -177,32 +108,6 @@ const SignUp = () => {
               required
               className="w-full px-4 py-3 bg-white text-[#2E8B57] border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:outline-none transition"
             />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-white mb-2">Profile Image</label>
-            <input
-              type="file"
-              name="profileImage"
-              accept="image/*"
-              onChange={handleImageChange}
-              required
-              className="w-full px-4 py-3 bg-white text-[#2E8B57] border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#2E8B57] file:text-white file:cursor-pointer"
-            />
-            <p className="text-[#FFDAB9] text-xs mt-2">
-              Upload JPG, PNG, GIF, or WebP. Large photos are resized to max{' '}
-              {formatFileSize(MAX_UPLOAD_IMAGE_SIZE)}.
-            </p>
-            {imagePreview && (
-              <div className="mt-4 flex flex-col items-center">
-                <img
-                  src={imagePreview}
-                  alt="Profile preview"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-[#FFD700]"
-                />
-                <p className="text-white text-sm mt-2">{profileImage?.name}</p>
-              </div>
-            )}
           </div>
 
           <div className="flex flex-col">

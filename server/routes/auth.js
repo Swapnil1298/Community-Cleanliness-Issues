@@ -5,12 +5,9 @@ import User from '../models/User.js';
 import { generateToken } from '../utils/jwt.js';
 import { toAuthUser } from '../utils/formatUser.js';
 import { protect } from '../middleware/auth.js';
-import { PROFILE_IMAGE_MAX_SIZE, profileImageUpload } from '../middleware/upload.js';
-import { saveUploadedFile } from '../utils/fileStorage.js';
 import { googleClientId } from '../config/googleAuth.js';
 
 const router = Router();
-const formatMb = (bytes) => `${bytes / (1024 * 1024)} MB`;
 
 const sendAuthResponse = (user, res, statusCode = 200) => {
   const token = generateToken(user._id.toString());
@@ -20,19 +17,7 @@ const sendAuthResponse = (user, res, statusCode = 200) => {
   });
 };
 
-router.post('/register', (req, res, next) => {
-  profileImageUpload.single('profileImage')(req, res, (err) => {
-    if (err) {
-      const message =
-        err.code === 'LIMIT_FILE_SIZE'
-          ? `Profile image must be smaller than ${formatMb(PROFILE_IMAGE_MAX_SIZE)}.`
-          : err.message || 'Profile image upload failed.';
-
-      return res.status(400).json({ message });
-    }
-    next();
-  });
-}, async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { email, password, displayName } = req.body;
 
@@ -40,23 +25,15 @@ router.post('/register', (req, res, next) => {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    if (!req.file) {
-      return res.status(400).json({ message: 'Profile image is required' });
-    }
-
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(409).json({ message: 'An account with this email already exists' });
     }
 
-    const storedProfileImage = await saveUploadedFile(req.file, 'profiles');
-    const photoURL = storedProfileImage.url;
-
     const user = await User.create({
       email: email.toLowerCase(),
       password,
       displayName: displayName || '',
-      photoURL,
       lastSignInTime: new Date(),
     });
 

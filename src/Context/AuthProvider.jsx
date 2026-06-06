@@ -13,8 +13,8 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const createUser = (email, password, displayName, profileImage) => {
-    return register(email, password, displayName, profileImage).then((authUser) => {
+  const createUser = (email, password, displayName) => {
+    return register(email, password, displayName).then((authUser) => {
       setUser(authUser);
       return authUser;
     });

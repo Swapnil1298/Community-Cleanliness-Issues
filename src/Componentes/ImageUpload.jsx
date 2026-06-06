@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FiCamera, FiUpload, FiX, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { MAX_UPLOAD_IMAGE_SIZE, prepareImageForUpload } from '../utils/imageUpload';
+
+const formatFileSize = (bytes) => `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
 
 const ImageUpload = ({ onImageSelect, label = "Upload Image", previewImage = null, accepting = 'image/*', openCameraOnMount = false }) => {
   const fileInputRef = useRef(null);
@@ -32,32 +35,29 @@ const ImageUpload = ({ onImageSelect, label = "Upload Image", previewImage = nul
   const processImage = async (file) => {
     setIsLoading(true);
     try {
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image size must be less than 5MB');
-        return;
-      }
-
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         toast.error('Please select a valid image file');
         return;
       }
 
-      // Create preview
+      const preparedImage = await prepareImageForUpload(file);
+
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreview(e.target.result);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(preparedImage);
 
-      // Call the callback with the file
-      onImageSelect(file);
-      toast.success('Image selected successfully!');
+      onImageSelect(preparedImage);
+      toast.success(
+        preparedImage.size < file.size
+          ? `Image optimized for upload (${formatFileSize(preparedImage.size)}).`
+          : 'Image selected successfully!'
+      );
       setShowOptions(false);
     } catch (error) {
       console.error('Error processing image:', error);
-      toast.error('Error processing image');
+      toast.error(error.message || 'Error processing image');
     } finally {
       setIsLoading(false);
     }
@@ -182,7 +182,8 @@ const ImageUpload = ({ onImageSelect, label = "Upload Image", previewImage = nul
 
       {/* Help Text */}
       <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
-        Supported formats: JPG, PNG, GIF, WebP. Max size: 5MB
+        Supported formats: JPG, PNG, GIF, WebP. Large photos are resized to max{' '}
+        {formatFileSize(MAX_UPLOAD_IMAGE_SIZE)}.
       </p>
     </div>
   );

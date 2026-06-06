@@ -1,33 +1,11 @@
 import { googleLogout } from '@react-oauth/google';
 import { request, setToken } from './apiClient';
 
-export const register = async (email, password, displayName, profileImage) => {
-  const formData = new FormData();
-  formData.append('email', email);
-  formData.append('password', password);
-  formData.append('displayName', displayName);
-  formData.append('profileImage', profileImage);
-
-  const API_BASE = import.meta.env.VITE_API_URL || '/api';
-
-  let response;
-  try {
-    response = await fetch(`${API_BASE}/auth/register`, {
-      method: 'POST',
-      body: formData,
-    });
-  } catch {
-    throw new Error(
-      'Cannot connect to the server. Start the backend with: cd server && npm run dev'
-    );
-  }
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || 'Registration failed');
-  }
-
-  const data = await response.json();
+export const register = async (email, password, displayName) => {
+  const data = await request('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ email, password, displayName }),
+  });
   setToken(data.token);
   return data.user;
 };

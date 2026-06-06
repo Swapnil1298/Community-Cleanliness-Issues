@@ -1,7 +1,7 @@
 // Dashbord.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { FiPlus, FiList, FiHeart, FiMenu, FiX, FiHome, FiArrowLeft, FiEye, FiSun, FiMoon } from 'react-icons/fi';
+import { FiPlus, FiList, FiHeart, FiMenu, FiX, FiHome, FiArrowLeft, FiEye, FiSun, FiMoon, FiUser } from 'react-icons/fi';
 import { MdDashboard } from 'react-icons/md';
 import { AuthContext } from '../../Context/AuthContext';
 import { resolveMediaUrl } from '../../utils/mediaUrl';
@@ -57,6 +57,13 @@ const Dashbord = () => {
       icon: <FiHeart size={20} />,
       description: 'Track your community contributions',
       color: 'from-purple-500 to-purple-600'
+    },
+    {
+      name: 'Edit Profile',
+      path: '/profile',
+      icon: <FiUser size={20} />,
+      description: 'Update your profile picture',
+      color: 'from-pink-500 to-pink-600'
     },
     { 
       name: 'All Issues', 
