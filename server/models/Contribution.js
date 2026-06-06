@@ -33,6 +33,10 @@ const contributionSchema = new mongoose.Schema(
     paymentProvider: { type: String, default: 'razorpay' },
     razorpayOrderId: { type: String, default: '' },
     razorpayPaymentId: { type: String, default: '' },
+    razorpayPaymentMethod: { type: String, default: '' },
+    razorpayPaymentStatus: { type: String, default: '' },
+    razorpayPaymentCaptured: { type: Boolean, default: false },
+    razorpayUpiVpa: { type: String, default: '' },
   },
   { timestamps: true }
 );

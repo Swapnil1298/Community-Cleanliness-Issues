@@ -127,6 +127,30 @@ const ContributeCard = () => {
           issueId: id,
           issueTitle: issue.title,
         },
+        method: {
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: true,
+        },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: 'Pay by UPI',
+                instruments: [
+                  {
+                    method: 'upi',
+                  },
+                ],
+              },
+            },
+            sequence: ['block.upi'],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         theme: {
           color: '#2563eb',
         },
@@ -143,7 +167,7 @@ const ContributeCard = () => {
             setShowModal(false);
           } catch (error) {
             console.error(error);
-            toast.error(error.message || 'Payment verification failed', {
+            toast.error(error.message || 'Payment could not be verified with Razorpay', {
               position: 'top-right',
               autoClose: 3000,
             });
@@ -453,7 +477,7 @@ const ContributeCard = () => {
 
               <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-3">
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  After successful Razorpay payment, the platform stores this issue-wise paid contribution record, refund preference, and fund status for transparency.
+                  Verified Razorpay payments are recorded against this issue for transparency.
                 </p>
               </div>
 
@@ -462,7 +486,7 @@ const ContributeCard = () => {
                 disabled={isPaying}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {isPaying ? 'Opening Payment...' : 'Pay Now'}
+                {isPaying ? 'Opening Payment...' : 'Pay with UPI / Razorpay'}
               </button>
             </form>
           </div>

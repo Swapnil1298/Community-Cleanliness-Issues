@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import crypto from 'crypto';
+import { Buffer } from 'node:buffer';
+import process from 'node:process';
 import Contribution from '../models/Contribution.js';
 
 const router = Router();
@@ -25,22 +27,60 @@ const getRazorpayCredentials = () => {
   return { keyId, keySecret };
 };
 
+const createRazorpayAuthHeader = (keyId, keySecret) =>
+  `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}`;
+
+const callRazorpayApi = async (path, options = {}) => {
+  const { keyId, keySecret } = getRazorpayCredentials();
+  const response = await fetch(`https://api.razorpay.com/v1${path}`, {
+    method: options.method || 'GET',
+    headers: {
+      Authorization: createRazorpayAuthHeader(keyId, keySecret),
+      'Content-Type': 'application/json',
+    },
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  });
+  const data = await response.json();
+
+  if (!response.ok) {
+    const error = new Error(data.error?.description || 'Razorpay API request failed');
+    error.statusCode = response.status;
+    throw error;
+  }
+
+  return data;
+};
+
+const validatePaidPayment = (payment, expected) => {
+  if (payment.order_id !== expected.orderId) {
+    throw new Error('Payment order does not match the verified order');
+  }
+
+  if (payment.amount !== expected.amount) {
+    throw new Error('Payment amount does not match the contribution amount');
+  }
+
+  if (payment.currency !== expected.currency) {
+    throw new Error('Payment currency does not match INR');
+  }
+
+  if (payment.status !== 'captured' || payment.captured !== true) {
+    throw new Error('Payment was not captured successfully');
+  }
+};
+
 router.post('/orders', async (req, res) => {
   try {
-    const { keyId, keySecret } = getRazorpayCredentials();
+    const { keyId } = getRazorpayCredentials();
     const amount = Number(req.body.amount);
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ message: 'A valid contribution amount is required' });
     }
 
-    const orderResponse = await fetch('https://api.razorpay.com/v1/orders', {
+    const order = await callRazorpayApi('/orders', {
       method: 'POST',
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+      body: {
         amount: Math.round(amount * 100),
         currency: 'INR',
         receipt: `issue_${req.body.issueId || 'general'}_${Date.now()}`.slice(0, 40),
@@ -48,16 +88,8 @@ router.post('/orders', async (req, res) => {
           issueId: req.body.issueId || '',
           issueTitle: req.body.issueTitle || '',
         },
-      }),
+      },
     });
-
-    const order = await orderResponse.json();
-
-    if (!orderResponse.ok) {
-      return res.status(orderResponse.status).json({
-        message: order.error?.description || 'Failed to create Razorpay order',
-      });
-    }
 
     res.status(201).json({
       keyId,
@@ -84,6 +116,11 @@ router.post('/verify', async (req, res) => {
       return res.status(400).json({ message: 'Payment verification data is incomplete' });
     }
 
+    const contributionAmount = Number(contribution.amount);
+    if (!contributionAmount || contributionAmount <= 0) {
+      return res.status(400).json({ message: 'A valid contribution amount is required' });
+    }
+
     const expectedSignature = crypto
       .createHmac('sha256', keySecret)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
@@ -93,18 +130,62 @@ router.post('/verify', async (req, res) => {
       return res.status(400).json({ message: 'Payment verification failed' });
     }
 
+    const existingContribution = await Contribution.findOne({
+      razorpayPaymentId: razorpay_payment_id,
+    });
+
+    if (existingContribution) {
+      return res.json(toContributionResponse(existingContribution));
+    }
+
+    const expectedPayment = {
+      orderId: razorpay_order_id,
+      amount: Math.round(contributionAmount * 100),
+      currency: 'INR',
+    };
+    let payment = await callRazorpayApi(`/payments/${razorpay_payment_id}`);
+
+    if (payment.order_id !== expectedPayment.orderId) {
+      throw new Error('Payment order does not match the verified order');
+    }
+
+    if (payment.amount !== expectedPayment.amount) {
+      throw new Error('Payment amount does not match the contribution amount');
+    }
+
+    if (payment.currency !== expectedPayment.currency) {
+      throw new Error('Payment currency does not match INR');
+    }
+
+    if (payment.status === 'authorized' && payment.captured !== true) {
+      payment = await callRazorpayApi(`/payments/${razorpay_payment_id}/capture`, {
+        method: 'POST',
+        body: {
+          amount: expectedPayment.amount,
+          currency: expectedPayment.currency,
+        },
+      });
+    }
+
+    validatePaidPayment(payment, expectedPayment);
+
     const savedContribution = await Contribution.create({
       ...contribution,
+      amount: contributionAmount,
       fundStatus: 'paid',
       paymentStatus: 'paid',
       paymentProvider: 'razorpay',
       razorpayOrderId: razorpay_order_id,
       razorpayPaymentId: razorpay_payment_id,
+      razorpayPaymentMethod: payment.method || '',
+      razorpayPaymentStatus: payment.status,
+      razorpayPaymentCaptured: Boolean(payment.captured),
+      razorpayUpiVpa: payment.upi?.vpa || '',
     });
 
     res.status(201).json(toContributionResponse(savedContribution));
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.statusCode || 400).json({ message: error.message });
   }
 });
 

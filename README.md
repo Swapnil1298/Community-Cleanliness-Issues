@@ -50,7 +50,7 @@ A full-stack web application that empowers communities to report damaged public 
 
 ## Set up real payments with Razorpay
 
-The contribution form uses Razorpay Checkout for real INR payments. A contribution is saved only after the backend verifies Razorpay's payment signature.
+The contribution form uses Razorpay Checkout for real INR payments. UPI is prioritised in Checkout, and a contribution is saved only after the backend verifies Razorpay's payment signature and confirms the payment is captured.
 
 1. Create a Razorpay account at [razorpay.com](https://razorpay.com).
 2. Go to **Account & Settings** -> **API Keys**.
@@ -63,6 +63,8 @@ The contribution form uses Razorpay Checkout for real INR payments. A contributi
 | `RAZORPAY_KEY_SECRET` | Razorpay key secret |
 
 Use test keys until you are ready to collect live money. Never expose `RAZORPAY_KEY_SECRET` in frontend env vars.
+
+Enable UPI in your Razorpay Dashboard payment-method settings. Razorpay decides which payment methods are visible for each account, key mode, browser, and device.
 
 ---
 
