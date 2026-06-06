@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
 import { GoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../Context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
 import { MAX_UPLOAD_IMAGE_SIZE, prepareImageForUpload } from '../utils/imageUpload';
 
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const formatFileSize = (bytes) => `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
 const SignUp = () => {
@@ -266,36 +264,25 @@ const SignUp = () => {
           </button>
         </form>
 
-        {googleClientId && (
-          <>
-            <div className="flex items-center my-6">
-              <div className="flex-grow h-px bg-[#FFD700]"></div>
-              <span className="px-3 text-[#FFD700] text-sm">or</span>
-              <div className="flex-grow h-px bg-[#FFD700]"></div>
-            </div>
+        <div className="flex items-center my-6">
+          <div className="flex-grow h-px bg-[#FFD700]"></div>
+          <span className="px-3 text-[#FFD700] text-sm">or</span>
+          <div className="flex-grow h-px bg-[#FFD700]"></div>
+        </div>
 
-            <div className="flex justify-center">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => toast.error('Google sign in failed')}
-                useOneTap
-                auto_select
-                context="signup"
-                theme="outline"
-                size="large"
-                text="signup_with"
-                shape="rectangular"
-              />
-            </div>
-          </>
-        )}
-
-        {!googleClientId && (
-          <p className="text-center text-[#FFDAB9] text-sm mt-6 flex items-center justify-center gap-2">
-            <FcGoogle className="w-5 h-5" />
-            Google sign-in requires VITE_GOOGLE_CLIENT_ID
-          </p>
-        )}
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error('Google sign in failed')}
+            useOneTap
+            auto_select
+            context="signup"
+            theme="outline"
+            size="large"
+            text="signup_with"
+            shape="rectangular"
+          />
+        </div>
 
         <p className="text-sm text-center text-white mt-6">
           Already have an account?{' '}

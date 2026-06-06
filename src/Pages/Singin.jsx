@@ -1,14 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../Context/AuthContext';
 import { forgotPassword } from '../api/authService';
 import toast, { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
-
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const SignIn = () => {
   const { singinuser, googleSignIn } = useContext(AuthContext);
@@ -146,36 +143,25 @@ const SignIn = () => {
           </button>
         </form>
 
-        {googleClientId && (
-          <>
-            <div className="flex items-center my-6">
-              <div className="flex-grow h-px bg-[#FFD700]"></div>
-              <span className="px-3 text-[#FFD700] text-sm">or</span>
-              <div className="flex-grow h-px bg-[#FFD700]"></div>
-            </div>
+        <div className="flex items-center my-6">
+          <div className="flex-grow h-px bg-[#FFD700]"></div>
+          <span className="px-3 text-[#FFD700] text-sm">or</span>
+          <div className="flex-grow h-px bg-[#FFD700]"></div>
+        </div>
 
-            <div className="flex justify-center">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => toast.error('Google sign in failed', { duration: 2000 })}
-                useOneTap
-                auto_select
-                context="signin"
-                theme="outline"
-                size="large"
-                text="signin_with"
-                shape="rectangular"
-              />
-            </div>
-          </>
-        )}
-
-        {!googleClientId && (
-          <p className="text-center text-[#FFDAB9] text-sm mt-6 flex items-center justify-center gap-2">
-            <FcGoogle className="w-5 h-5" />
-            Google sign-in requires VITE_GOOGLE_CLIENT_ID
-          </p>
-        )}
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error('Google sign in failed', { duration: 2000 })}
+            useOneTap
+            auto_select
+            context="signin"
+            theme="outline"
+            size="large"
+            text="signin_with"
+            shape="rectangular"
+          />
+        </div>
 
         <p className="text-sm text-center text-white mt-6">
           Don’t have an account?{' '}

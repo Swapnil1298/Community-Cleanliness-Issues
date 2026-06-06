@@ -21,7 +21,7 @@ services:
       - key: SEED_SAMPLE_ISSUES
         value: false
       - key: GOOGLE_CLIENT_ID
-        sync: false
+        value: 710103371246-262arva004v78f07londq0e78e60bi1h.apps.googleusercontent.com
       - key: RAZORPAY_KEY_ID
         sync: false
       - key: RAZORPAY_KEY_SECRET
@@ -29,4 +29,4 @@ services:
       - key: VITE_API_URL
         value: /api
       - key: VITE_GOOGLE_CLIENT_ID
-        sync: false
+        value: 710103371246-262arva004v78f07londq0e78e60bi1h.apps.googleusercontent.com

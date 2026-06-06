@@ -7,6 +7,7 @@ import { toAuthUser } from '../utils/formatUser.js';
 import { protect } from '../middleware/auth.js';
 import { PROFILE_IMAGE_MAX_SIZE, profileImageUpload } from '../middleware/upload.js';
 import { saveUploadedFile } from '../utils/fileStorage.js';
+import { googleClientId } from '../config/googleAuth.js';
 
 const router = Router();
 const formatMb = (bytes) => `${bytes / (1024 * 1024)} MB`;
@@ -90,7 +91,6 @@ router.post('/login', async (req, res) => {
 router.post('/google', async (req, res) => {
   try {
     const { credential } = req.body;
-    const googleClientId = process.env.GOOGLE_CLIENT_ID;
 
     if (!credential) {
       return res.status(400).json({ message: 'Google credential is required' });
