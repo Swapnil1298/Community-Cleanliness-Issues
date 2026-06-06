@@ -5,6 +5,7 @@ import { MdDashboard, MdBugReport, MdContactSupport } from 'react-icons/md';
 import logo from '../assets/Logo.png';
 import { AuthContext } from '../Context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import { resolveMediaUrl } from '../utils/mediaUrl';
 
 const Header = () => {

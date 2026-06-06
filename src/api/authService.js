@@ -1,3 +1,4 @@
+import { googleLogout } from '@react-oauth/google';
 import { request, setToken } from './apiClient';
 
 export const register = async (email, password, displayName, profileImage) => {
@@ -70,5 +71,6 @@ export const forgotPassword = async (email) => {
 };
 
 export const logout = () => {
+  googleLogout();
   setToken(null);
 };
