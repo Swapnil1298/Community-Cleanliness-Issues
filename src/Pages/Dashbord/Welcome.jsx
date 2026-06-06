@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiPlus, FiList, FiHeart, FiTrendingUp, FiUsers, FiAward, FiTarget } from 'react-icons/fi';
+import { FiPlus, FiList, FiHeart, FiUsers, FiAward, FiTarget } from 'react-icons/fi';
+import { MdLocationCity, MdRecycling } from 'react-icons/md';
 import { AuthContext } from '../../Context/AuthContext';
 
 const Welcome = () => {
@@ -36,22 +37,29 @@ const Welcome = () => {
 
   const stats = [
     {
-      title: 'Community Impact',
-      value: '2,500+',
-      description: 'Issues Resolved',
-      icon: <FiTrendingUp size={32} />,
-      color: 'text-green-600'
-    },
-    {
-      title: 'Active Members',
-      value: '1,200+',
-      description: 'Contributors',
+      title: 'Active Users',
+      value: '72',
+      description: 'Community members',
       icon: <FiUsers size={32} />,
       color: 'text-blue-600'
     },
     {
-      title: 'Recognition',
-      value: '95%',
+      title: 'Issues Resolved',
+      value: '9',
+      description: 'Community reports fixed',
+      icon: <MdRecycling size={32} />,
+      color: 'text-green-600'
+    },
+    {
+      title: 'Indian Cities Covered',
+      value: '4',
+      description: 'Locations represented',
+      icon: <MdLocationCity size={32} />,
+      color: 'text-purple-600'
+    },
+    {
+      title: 'Success Rate',
+      value: '82%',
       description: 'Success Rate',
       icon: <FiAward size={32} />,
       color: 'text-yellow-600'
@@ -136,7 +144,7 @@ const Welcome = () => {
         <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-color)' }}>
           Community Impact
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.title}
