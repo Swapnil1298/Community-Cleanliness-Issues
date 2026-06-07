@@ -9,6 +9,7 @@ import contributionsRouter from './routes/contributions.js';
 import authRouter from './routes/auth.js';
 import uploadRouter from './routes/upload.js';
 import paymentsRouter from './routes/payments.js';
+import newsletterRouter from './routes/newsletter.js';
 import { seedSampleIssues } from './seeds/sampleIssues.js';
 import { streamUploadedFile } from './utils/fileStorage.js';
 
@@ -30,6 +31,7 @@ app.use('/api/issues', issuesRouter);
 app.use('/api/contributions', contributionsRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/payments', paymentsRouter);
+app.use('/api/newsletter', newsletterRouter);
 
 // ─── Serve built React/Vite frontend in production ───
 if (process.env.NODE_ENV === 'production') {

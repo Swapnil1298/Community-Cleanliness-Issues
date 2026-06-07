@@ -11,12 +11,15 @@ import SlideOnScroll from './SlideOnScroll';
 import { AuthContext } from '../Context/AuthContext';
 import { FiArrowDown, FiUsers, FiTrendingUp, FiAward, FiCheckCircle, FiStar, FiMail } from 'react-icons/fi';
 import { MdRecycling, MdLocationCity, MdTrendingUp } from 'react-icons/md';
-import { getLatestIssues } from '../api/databaseService';
+import { getLatestIssues, subscribeToNewsletter } from '../api/databaseService';
+import toast from 'react-hot-toast';
 import Loading from './Loding';
 
 const Home = () => {
   const [latestdata, setLatestdata] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [subscriberEmail, setSubscriberEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -32,6 +35,27 @@ const Home = () => {
     };
     fetchLatest();
   }, []);
+
+  const handleSubscribe = async (event) => {
+    event.preventDefault();
+
+    const email = subscriberEmail.trim();
+    if (!email) {
+      toast.error('Please enter your email address.');
+      return;
+    }
+
+    setIsSubscribing(true);
+    try {
+      const response = await subscribeToNewsletter(email);
+      toast.success(response.message || 'Subscribed successfully!');
+      setSubscriberEmail('');
+    } catch (error) {
+      toast.error(error.message || 'Subscription failed. Please try again.');
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
 
   // Statistics data
   const stats = [
@@ -358,16 +382,23 @@ const Home = () => {
             </p>
           </SlideOnScroll>
           <SlideOnScroll>
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 max-w-md mx-auto">
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 md:gap-4 max-w-md mx-auto">
               <input
                 type="email"
+                value={subscriberEmail}
+                onChange={(event) => setSubscriberEmail(event.target.value)}
                 placeholder="Enter your email"
+                required
                 className="flex-1 px-3 md:px-4 py-2 md:py-3 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm md:text-base"
               />
-              <button className="w-full sm:w-auto bg-blue-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 text-sm md:text-base">
-                Subscribe
+              <button
+                type="submit"
+                disabled={isSubscribing}
+                className="w-full sm:w-auto bg-blue-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 text-sm md:text-base disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isSubscribing ? 'Subscribing...' : 'Subscribe'}
               </button>
-            </div>
+            </form>
           </SlideOnScroll>
         </div>
       </section>

@@ -108,3 +108,10 @@ export const getMyContributions = async (email) => {
 export const getIssueContributors = async (issueId) => {
   return request(`/contributions/issue/${issueId}`);
 };
+
+export const subscribeToNewsletter = async (email) => {
+  return request('/newsletter/subscribe', {
+    method: 'POST',
+    body: JSON.stringify({ email, source: 'home_newsletter' }),
+  });
+};
