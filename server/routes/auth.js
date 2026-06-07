@@ -119,6 +119,18 @@ router.get('/me', protect, async (req, res) => {
   res.json({ user: toAuthUser(req.user) });
 });
 
+router.get('/members', protect, async (_req, res) => {
+  try {
+    const users = await User.find({})
+      .sort({ createdAt: -1 })
+      .select('email displayName photoURL phoneNumber location emailVerified lastSignInTime createdAt updatedAt');
+
+    res.json({ members: users.map(toAuthUser) });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.put('/profile', protect, async (req, res) => {
   try {
     const { displayName, photoURL, phoneNumber, location } = req.body;

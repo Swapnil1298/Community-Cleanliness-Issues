@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FiLogOut, FiMenu, FiX, FiSun, FiMoon, FiHome, FiList, FiPlus, FiUser, FiSettings, FiChevronDown, FiInfo } from 'react-icons/fi';
+import { FiLogOut, FiMenu, FiX, FiSun, FiMoon, FiHome, FiList, FiPlus, FiUser, FiChevronDown, FiInfo, FiUsers } from 'react-icons/fi';
 import { MdDashboard, MdBugReport, MdContactSupport } from 'react-icons/md';
 import logo from '../assets/Logo.png';
 import { AuthContext } from '../Context/AuthContext';
@@ -29,6 +29,7 @@ const Header = () => {
     ? [
         { name: 'Home', path: '/', icon: <FiHome size={18} /> },
         { name: 'All Issues', path: '/allissues', icon: <FiList size={18} /> },
+        { name: 'Members', path: '/members', icon: <FiUsers size={18} /> },
         { name: 'Add Issue', path: '/dashbord/addissues', icon: <FiPlus size={18} /> },
         { name: 'About', path: '/about', icon: <FiInfo size={18} /> },
         { name: 'Contact', path: '/contact', icon: <MdContactSupport size={18} /> },
@@ -153,6 +154,14 @@ const Header = () => {
                       Profile
                     </NavLink>
                     <NavLink
+                      to="/members"
+                      onClick={() => setProfileDropdown(false)}
+                      className="flex items-center gap-2 px-3 xl:px-4 py-2 text-sm xl:text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      <FiUsers size={16} />
+                      Members
+                    </NavLink>
+                    <NavLink
                       to="/dashbord"
                       onClick={() => setProfileDropdown(false)}
                       className="flex items-center gap-2 px-3 xl:px-4 py-2 text-sm xl:text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -267,6 +276,15 @@ const Header = () => {
                   >
                     <FiUser size={18} />
                     <span className="text-base font-medium">Profile</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/members"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+                  >
+                    <FiUsers size={18} />
+                    <span className="text-base font-medium">Members</span>
                   </NavLink>
                   
                   <button

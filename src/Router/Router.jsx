@@ -11,6 +11,7 @@ import Dashbord from '../Pages/Dashbord/Dashbord';
 const Home = lazy(() => import('../Pages/Home'));
 const About = lazy(() => import('../Pages/About'));
 const Profile = lazy(() => import('../Pages/Profile'));
+const Members = lazy(() => import('../Pages/Members'));
 const SignUp = lazy(() => import('../Pages/SingUp'));
 const SignIn = lazy(() => import('../Pages/Singin'));
 const AddIssue = lazy(() => import('../Pages/AddIssue'));
@@ -57,12 +58,25 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'profile',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Profile />
-          </Suspense>
-        ),
+        element: <PrivateRouter />,
+        children: [
+          {
+            path: 'profile',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <Profile />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'members',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <Members />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         element: <PublicRoute />,

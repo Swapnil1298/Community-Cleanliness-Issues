@@ -33,6 +33,11 @@ export const getCurrentUser = async () => {
   return data.user;
 };
 
+export const getMembers = async () => {
+  const data = await request('/auth/members');
+  return data.members;
+};
+
 export const updateProfile = async (profileData) => {
   const data = await request('/auth/profile', {
     method: 'PUT',

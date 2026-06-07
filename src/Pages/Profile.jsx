@@ -29,6 +29,14 @@ const Profile = () => {
     }
   }, [showImageUpload, setOpenCameraPicker]);
 
+  useEffect(() => {
+    setEditedInfo({
+      displayName: user?.displayName || '',
+      phone: user?.phoneNumber || '',
+      location: user?.location || ''
+    });
+  }, [user]);
+
   const handleImageSelect = async (file) => {
     if (!file) return;
     
@@ -53,15 +61,26 @@ const Profile = () => {
     }
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const updatedUser = await updateProfile({
+        displayName: editedInfo.displayName,
+        phoneNumber: editedInfo.phone,
+        location: editedInfo.location
+      });
+      updateUser(updatedUser);
+      setIsEditing(false);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      toast.error(error.message || 'Failed to update profile');
+    }
   };
 
   const handleCancel = () => {
     setEditedInfo({
       displayName: user?.displayName || '',
       phone: user?.phoneNumber || '',
-      location: ''
+      location: user?.location || ''
     });
     setIsEditing(false);
   };
@@ -373,7 +392,7 @@ const Profile = () => {
                     />
                   ) : (
                     <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600" style={{ color: 'var(--text-color)' }}>
-                      {editedInfo.location || 'Not provided'}
+                      {user?.location || editedInfo.location || 'Not provided'}
                     </div>
                   )}
                 </div>
